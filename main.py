@@ -1,21 +1,65 @@
 import os
 import asyncio
+import sqlite3
 from aiogram import Bot, types, Dispatcher
 from token_data import TELEGRAM_TOKEN
+
+# Устанавливаем соединение с базой данных SQLite
+conn = sqlite3.connect('user.db')
+cursor = conn.cursor()
+
+# Создаем таблицу пользователей, если она не существует
+cursor.execute('''CREATE TABLE IF NOT EXISTS users (
+                    id INTEGER PRIMARY KEY,
+                    username TEXT,
+                    first_name TEXT,
+                    last_name TEXT,
+                    blok INTEGER DEFAULT 0
+                )''')
+conn.commit()
+
+# Здесь должен быть ваш остальной код...
 
 # Здесь нужно указать токен вашего бота
 bot = Bot(TELEGRAM_TOKEN)
 dp = Dispatcher(bot)
 
 # Путь к папке, которую бот будет просматривать
-base_folder = 'd:\ПНР'
+base_folder = 'instr'
 
 # Переменная для хранения выбранного пути
 current_path = base_folder
 
 @dp.message_handler(commands=['start'])
 async def handle_start(message: types.Message):
-    # Получаем список файлов и папок в указанной директории
+    # Сохраняем информацию о пользователе в базе данных
+    user_id = message.from_user.id
+    username = message.from_user.username
+    first_name = message.from_user.first_name
+    last_name = message.from_user.last_name
+
+    cursor.execute("INSERT OR IGNORE INTO users (id, username, first_name, last_name) VALUES (?, ?, ?, ?)",
+                   (user_id, username, first_name, last_name))
+    conn.commit()
+
+    # Получаем имя пользователя для приветствия
+    if first_name is not None:
+        name = first_name
+    elif username is not None:
+        name = username
+    else:
+        name = "User"
+
+    # Проверяем, заблокирован ли пользователь
+    cursor.execute("SELECT blok FROM users WHERE id = ?", (user_id,))
+    result = cursor.fetchone()
+
+    if result is not None and result[0] == 1:
+        # Пользователь заблокирован, отправляем сообщение с отказом в доступе
+        await message.answer("Вам запрещен доступ к боту.")
+        return
+
+    # Получаем файлы и папки в текущем каталоге
     files = []
     folders = []
 
@@ -26,10 +70,10 @@ async def handle_start(message: types.Message):
         elif os.path.isdir(item_path):
             folders.append(item)
 
-    # Создаем клавиатуру с папками и файлами в виде кнопок
+    # Создаем клавиатуру с папками и файлами в качестве кнопок
     keyboard = types.ReplyKeyboardMarkup(row_width=1)
 
-    # Добавляем кнопку "назад", если текущий путь не совпадает с базовой папкой
+    # Добавляем кнопку "Назад", если текущий путь не является базовым каталогом
     if current_path != base_folder:
         keyboard.add(types.KeyboardButton('Назад'))
 
@@ -42,18 +86,27 @@ async def handle_start(message: types.Message):
     if current_path == base_folder:
         keyboard.add(types.KeyboardButton('01_Инфо'))
 
-    # Отправляем пользователю сообщение с клавиатурой
-    await message.answer('Выберите папку или файл:', reply_markup=keyboard)
+    # Отправляем приветственное сообщение с клавиатурой
+    await message.answer(f"Выберите папку или файл:", reply_markup=keyboard)
 
 # Обработчик нажатия кнопок с папками и файлами
 @dp.message_handler()
 async def handle_folder_or_file(message: types.Message):
     global current_path
+
+    # Проверяем, заблокирован ли пользователь
+    cursor.execute("SELECT blok FROM users WHERE id = ?", (message.from_user.id,))
+    result = cursor.fetchone()
+    if result is not None and result[0] == 1:
+        # Пользователь заблокирован, отправляем сообщение с отказом в доступе
+        await message.answer("Вам запрещен доступ к боту.")
+        return
+
     chosen_item = message.text
     chosen_item_path = os.path.join(current_path, chosen_item)
 
     if chosen_item == 'Назад':
-        # Если выбрана кнопка "назад", обновляем текущий путь на родительскую папку
+        # Если выбрана кнопка "Назад", обновляем текущий путь на родительскую папку
         current_path = os.path.dirname(current_path)
         await handle_start(message)
     elif os.path.isfile(chosen_item_path):
@@ -70,9 +123,16 @@ async def handle_folder_or_file(message: types.Message):
         current_path = chosen_item_path
         await handle_start(message)
 
+    # Сохраняем изменения в базе данных
+    conn.commit()
+
 
 # Запускаем бота
 if __name__ == '__main__':
     loop = asyncio.get_event_loop()
     loop.create_task(dp.start_polling())
-    loop.run_forever()
+    try:
+        loop.run_forever()
+    finally:
+        # Закрываем соединение с базой данных при остановке бота
+        conn.close()
