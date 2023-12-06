@@ -1,0 +1,11 @@
+# Игнорировать папки
+Instructions/
+test/
+venv/
+
+# Игнорировать регистрационные данные и token
+token_data.py
+
+# Игнорировать базы данных
+ip_addresses.db
+user.db
