@@ -38,7 +38,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "telegram_bot.apps.TelegramBotConfig",
-    "users.apps.UsersCinfig",
+    "users.apps.UsersConfig",
     "send_mail.apps.SendMailConfig",
 ]
 
