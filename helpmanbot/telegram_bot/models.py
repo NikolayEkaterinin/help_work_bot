@@ -5,19 +5,21 @@ from django.db import models
 class CustomUser(models.Model):
     telegram_id = models.IntegerField(
         verbose_name='Telegram ID',
-        max_length=30,
     )
     username = models.TextField(
         verbose_name='Username',
         max_length=150,
+        null=True,  # Разрешаем нулевые значения
     )
     first_name = models.TextField(
         verbose_name='First Name',
         max_length=150,
+        null=True,  # Разрешаем нулевые значения
     )
     last_name = models.TextField(
         verbose_name='Last Name',
         max_length=150,
+        null=True,  # Разрешаем нулевые значения
     )
     access = models.BooleanField(
         default=False,
