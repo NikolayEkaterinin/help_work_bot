@@ -15,6 +15,7 @@ load_dotenv()
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'your_project_name.settings')
 django.setup()
 
+
 # Импорт моделей CustomUser и Image
 
 
@@ -23,7 +24,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         bot.infinity_polling()
-    
+
 
 # Инициализация бота
 TELEGRAM_TOKEN = os.getenv('TELEGRAM_TOKEN')
@@ -70,6 +71,11 @@ def handle_start(message):
         bot.send_message(user_id, f'Ваш ID {user_id}')
         return
 
+    # После успешной авторизации отправляем клавиатуру с папками и файлами
+    send_keyboard(message)
+
+
+def send_keyboard(message):
     # Получаем файлы и папки в текущем каталоге
     files = []
     folders = []
@@ -99,8 +105,9 @@ def handle_start(message):
     for file in files:
         keyboard.add(file)
 
-    # Отправляем приветственное сообщение с клавиатурой
-    bot.send_message(user_id, "Выберите папку или файл:", reply_markup=keyboard)
+    # Отправляем клавиатуру с содержимым папки
+    bot.send_message(message.from_user.id, "Выберите папку или файл:",
+                     reply_markup=keyboard)
 
 
 # Обработчик кнопок с папками и файлами
@@ -122,13 +129,18 @@ def handle_folder_or_file(message):
 
         if chosen_item == 'Назад':
             # Если выбрана кнопка "Назад", обновляем текущий путь на родительскую папку
-            parent_path = os.path.dirname(current_path)
-            if parent_path.startswith(base_folder):
-                current_path = parent_path
-            else:
+            current_path, _ = os.path.split(current_path)
+            send_keyboard(message)  # Отправляем клавиатуру с содержимым папки
+        elif os.path.isdir(chosen_item_path):
+            # Проверяем, если выбрана папка, но она выше базовой папки
+            if not chosen_item_path.startswith(base_folder):
                 bot.send_message(message.from_user.id, "Вы достигли верхней директории.")
                 return
-            handle_start(message)
+
+            # Если выбрана папка, обновляем текущий путь и отправляем клавиатуру с содержимым папки
+            current_path = chosen_item_path
+            send_keyboard(message)
+        else:
             file_size = os.path.getsize(chosen_item_path)
             # Проверяем, если размер файла больше 50 МБ (в байтах)
             if file_size > 50 * 1024 * 1024:
@@ -141,15 +153,6 @@ def handle_folder_or_file(message):
                 # Если выбран файл, и его размер допустим, отправляем его пользователю
                 with open(chosen_item_path, 'rb') as f:
                     bot.send_document(message.from_user.id, f)
-        elif os.path.isdir(chosen_item_path):
-            # Проверяем, если выбрана папка, но она выше базовой папки
-            if not chosen_item_path.startswith(base_folder):
-                bot.send_message(message.from_user.id, "Вы достигли верхней директории.")
-                return
-
-            # Если выбрана папка, обновляем текущий путь и отправляем список файлов и папок
-            current_path = chosen_item_path
-            handle_start(message)
 
     except Exception as e:
         # Записываем ошибку в лог и уведомляем пользователя о неполадке
@@ -158,7 +161,8 @@ def handle_folder_or_file(message):
 
 
 # Обработчик кнопки "Инфо"
-@bot.message_handler(func=lambda message: message.text == 'Инфо. Актуальные образы')
+@bot.message_handler(
+    func=lambda message: message.text == 'Инфо. Актуальные образы')
 def handle_info(message):
     try:
         # Получаем все объекты модели Image
@@ -185,11 +189,13 @@ def handle_info(message):
             for info_message in info_messages:
                 bot.send_message(message.from_user.id, info_message)
         else:
-            bot.send_message(message.from_user.id, "В таблице images нет данных для отображения.")
+            bot.send_message(message.from_user.id,
+                             "В таблице images нет данных для отображения.")
 
     except Exception as e:
         logging.error(f"Произошла ошибка: {e}")
-        bot.send_message(message.from_user.id, "Произошла ошибка при выполнении операции. Пожалуйста, попробуйте еще раз.")
+        bot.send_message(message.from_user.id,
+                         "Произошла ошибка при выполнении операции. Пожалуйста, попробуйте еще раз.")
 
 
 # Запускаем бота

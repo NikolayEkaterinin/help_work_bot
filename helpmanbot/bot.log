@@ -623,3 +623,231 @@ requests.exceptions.ConnectionError: HTTPSConnectionPool(host='api.telegram.org'
 2024-03-12 12:03:56,050 [ERROR]: Произошла ошибка: [Errno 2] No such file or directory: '/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/helpmanbot/Instructions/2/Назад'
 2024-03-12 12:05:27,229 [ERROR]: Infinity polling: polling exited
 2024-03-12 12:05:27,258 [ERROR]: Break infinity polling
+2024-03-12 14:42:43,792 [ERROR]: Произошла ошибка: [Errno 2] No such file or directory: '/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/helpmanbot/Instructions/1/Назад'
+2024-03-12 14:42:53,828 [ERROR]: Произошла ошибка: [Errno 2] No such file or directory: '/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/helpmanbot/Instructions/1/Назад'
+2024-03-12 14:51:29,858 [ERROR]: Infinity polling: polling exited
+2024-03-12 14:51:29,861 [ERROR]: Break infinity polling
+2024-03-12 14:51:52,935 [ERROR]: Произошла ошибка: [Errno 2] No such file or directory: '/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/helpmanbot/Instructions/Инфо. Актуальные образы'
+2024-03-12 14:52:45,098 [ERROR]: Произошла ошибка: [Errno 2] No such file or directory: '/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/helpmanbot/Instructions/29 сеть'
+2024-03-12 14:57:36,347 [ERROR]: Infinity polling: polling exited
+2024-03-12 14:57:36,348 [ERROR]: Break infinity polling
+2024-03-12 14:59:56,410 [ERROR]: Infinity polling: polling exited
+2024-03-12 14:59:56,412 [ERROR]: Break infinity polling
+2024-03-12 15:00:46,352 [ERROR]: Infinity polling exception: HTTPSConnectionPool(host='api.telegram.org', port=443): Max retries exceeded with url: /bot6863293806:AAH3rusajaRMnCL82Og4HlCvPFDzOBh4dVw/getUpdates?offset=937875174&timeout=20 (Caused by ProxyError('Unable to connect to proxy', RemoteDisconnected('Remote end closed connection without response')))
+2024-03-12 15:00:46,356 [ERROR]: Exception traceback:
+Traceback (most recent call last):
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/urllib3/connectionpool.py", line 790, in urlopen
+    response = self._make_request(
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/urllib3/connectionpool.py", line 536, in _make_request
+    response = conn.getresponse()
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/urllib3/connection.py", line 454, in getresponse
+    httplib_response = super().getresponse()
+  File "/usr/local/Cellar/python@3.9/3.9.18/Frameworks/Python.framework/Versions/3.9/lib/python3.9/http/client.py", line 1377, in getresponse
+    response.begin()
+  File "/usr/local/Cellar/python@3.9/3.9.18/Frameworks/Python.framework/Versions/3.9/lib/python3.9/http/client.py", line 320, in begin
+    version, status, reason = self._read_status()
+  File "/usr/local/Cellar/python@3.9/3.9.18/Frameworks/Python.framework/Versions/3.9/lib/python3.9/http/client.py", line 289, in _read_status
+    raise RemoteDisconnected("Remote end closed connection without"
+http.client.RemoteDisconnected: Remote end closed connection without response
+
+The above exception was the direct cause of the following exception:
+
+urllib3.exceptions.ProxyError: ('Unable to connect to proxy', RemoteDisconnected('Remote end closed connection without response'))
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/requests/adapters.py", line 486, in send
+    resp = conn.urlopen(
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/urllib3/connectionpool.py", line 844, in urlopen
+    retries = retries.increment(
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/urllib3/util/retry.py", line 515, in increment
+    raise MaxRetryError(_pool, url, reason) from reason  # type: ignore[arg-type]
+urllib3.exceptions.MaxRetryError: HTTPSConnectionPool(host='api.telegram.org', port=443): Max retries exceeded with url: /bot6863293806:AAH3rusajaRMnCL82Og4HlCvPFDzOBh4dVw/getUpdates?offset=937875174&timeout=20 (Caused by ProxyError('Unable to connect to proxy', RemoteDisconnected('Remote end closed connection without response')))
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/telebot/__init__.py", line 955, in infinity_polling
+    self.polling(non_stop=True, timeout=timeout, long_polling_timeout=long_polling_timeout,
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/telebot/__init__.py", line 1043, in polling
+    self.__threaded_polling(non_stop=non_stop, interval=interval, timeout=timeout, long_polling_timeout=long_polling_timeout,
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/telebot/__init__.py", line 1118, in __threaded_polling
+    raise e
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/telebot/__init__.py", line 1073, in __threaded_polling
+    polling_thread.raise_exceptions()
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/telebot/util.py", line 108, in raise_exceptions
+    raise self.exception_info
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/telebot/util.py", line 90, in run
+    task(*args, **kwargs)
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/telebot/__init__.py", line 649, in __retrieve_updates
+    updates = self.get_updates(offset=(self.last_update_id + 1),
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/telebot/__init__.py", line 623, in get_updates
+    json_updates = apihelper.get_updates(self.token, offset, limit, timeout, allowed_updates, long_polling_timeout)
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/telebot/apihelper.py", line 321, in get_updates
+    return _make_request(token, method_url, params=payload)
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/telebot/apihelper.py", line 156, in _make_request
+    result = _get_req_session().request(
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/requests/sessions.py", line 589, in request
+    resp = self.send(prep, **send_kwargs)
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/requests/sessions.py", line 703, in send
+    r = adapter.send(request, **kwargs)
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/requests/adapters.py", line 513, in send
+    raise ProxyError(e, request=request)
+requests.exceptions.ProxyError: HTTPSConnectionPool(host='api.telegram.org', port=443): Max retries exceeded with url: /bot6863293806:AAH3rusajaRMnCL82Og4HlCvPFDzOBh4dVw/getUpdates?offset=937875174&timeout=20 (Caused by ProxyError('Unable to connect to proxy', RemoteDisconnected('Remote end closed connection without response')))
+
+2024-03-12 15:01:04,558 [ERROR]: Infinity polling: polling exited
+2024-03-12 15:01:04,559 [ERROR]: Break infinity polling
+2024-03-12 15:02:39,103 [ERROR]: Произошла ошибка: [Errno 2] No such file or directory: '/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/helpmanbot/Instructions/1/1'
+2024-03-12 19:12:58,246 [ERROR]: Infinity polling exception: HTTPSConnectionPool(host='api.telegram.org', port=443): Max retries exceeded with url: /bot6863293806:AAH3rusajaRMnCL82Og4HlCvPFDzOBh4dVw/getMe (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x10ef77d30>: Failed to resolve 'api.telegram.org' ([Errno 8] nodename nor servname provided, or not known)"))
+2024-03-12 19:12:58,352 [ERROR]: Exception traceback:
+Traceback (most recent call last):
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/urllib3/connection.py", line 200, in _new_conn
+    sock = connection.create_connection(
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/urllib3/util/connection.py", line 60, in create_connection
+    for res in socket.getaddrinfo(host, port, family, socket.SOCK_STREAM):
+  File "/usr/local/Cellar/python@3.9/3.9.18/Frameworks/Python.framework/Versions/3.9/lib/python3.9/socket.py", line 954, in getaddrinfo
+    for res in _socket.getaddrinfo(host, port, family, type, proto, flags):
+socket.gaierror: [Errno 8] nodename nor servname provided, or not known
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/urllib3/connectionpool.py", line 790, in urlopen
+    response = self._make_request(
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/urllib3/connectionpool.py", line 491, in _make_request
+    raise new_e
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/urllib3/connectionpool.py", line 467, in _make_request
+    self._validate_conn(conn)
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/urllib3/connectionpool.py", line 1092, in _validate_conn
+    conn.connect()
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/urllib3/connection.py", line 604, in connect
+    self.sock = sock = self._new_conn()
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/urllib3/connection.py", line 207, in _new_conn
+    raise NameResolutionError(self.host, self, e) from e
+urllib3.exceptions.NameResolutionError: <urllib3.connection.HTTPSConnection object at 0x10ef77d30>: Failed to resolve 'api.telegram.org' ([Errno 8] nodename nor servname provided, or not known)
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/requests/adapters.py", line 486, in send
+    resp = conn.urlopen(
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/urllib3/connectionpool.py", line 844, in urlopen
+    retries = retries.increment(
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/urllib3/util/retry.py", line 515, in increment
+    raise MaxRetryError(_pool, url, reason) from reason  # type: ignore[arg-type]
+urllib3.exceptions.MaxRetryError: HTTPSConnectionPool(host='api.telegram.org', port=443): Max retries exceeded with url: /bot6863293806:AAH3rusajaRMnCL82Og4HlCvPFDzOBh4dVw/getMe (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x10ef77d30>: Failed to resolve 'api.telegram.org' ([Errno 8] nodename nor servname provided, or not known)"))
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/telebot/__init__.py", line 955, in infinity_polling
+    self.polling(non_stop=True, timeout=timeout, long_polling_timeout=long_polling_timeout,
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/telebot/__init__.py", line 1040, in polling
+    logger.info('Starting your bot with username: [@%s]', self.user.username)
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/telebot/__init__.py", line 273, in user
+    self._user = self.get_me()
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/telebot/__init__.py", line 1236, in get_me
+    result = apihelper.get_me(self.token)
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/telebot/apihelper.py", line 196, in get_me
+    return _make_request(token, method_url)
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/telebot/apihelper.py", line 156, in _make_request
+    result = _get_req_session().request(
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/requests/sessions.py", line 589, in request
+    resp = self.send(prep, **send_kwargs)
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/requests/sessions.py", line 703, in send
+    r = adapter.send(request, **kwargs)
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/requests/adapters.py", line 519, in send
+    raise ConnectionError(e, request=request)
+requests.exceptions.ConnectionError: HTTPSConnectionPool(host='api.telegram.org', port=443): Max retries exceeded with url: /bot6863293806:AAH3rusajaRMnCL82Og4HlCvPFDzOBh4dVw/getMe (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x10ef77d30>: Failed to resolve 'api.telegram.org' ([Errno 8] nodename nor servname provided, or not known)"))
+
+2024-03-12 19:13:01,791 [ERROR]: Infinity polling exception: HTTPSConnectionPool(host='api.telegram.org', port=443): Max retries exceeded with url: /bot6863293806:AAH3rusajaRMnCL82Og4HlCvPFDzOBh4dVw/getMe (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x10ef92520>: Failed to resolve 'api.telegram.org' ([Errno 8] nodename nor servname provided, or not known)"))
+2024-03-12 19:13:01,794 [ERROR]: Exception traceback:
+Traceback (most recent call last):
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/urllib3/connection.py", line 200, in _new_conn
+    sock = connection.create_connection(
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/urllib3/util/connection.py", line 60, in create_connection
+    for res in socket.getaddrinfo(host, port, family, socket.SOCK_STREAM):
+  File "/usr/local/Cellar/python@3.9/3.9.18/Frameworks/Python.framework/Versions/3.9/lib/python3.9/socket.py", line 954, in getaddrinfo
+    for res in _socket.getaddrinfo(host, port, family, type, proto, flags):
+socket.gaierror: [Errno 8] nodename nor servname provided, or not known
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/urllib3/connectionpool.py", line 790, in urlopen
+    response = self._make_request(
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/urllib3/connectionpool.py", line 491, in _make_request
+    raise new_e
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/urllib3/connectionpool.py", line 467, in _make_request
+    self._validate_conn(conn)
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/urllib3/connectionpool.py", line 1092, in _validate_conn
+    conn.connect()
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/urllib3/connection.py", line 604, in connect
+    self.sock = sock = self._new_conn()
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/urllib3/connection.py", line 207, in _new_conn
+    raise NameResolutionError(self.host, self, e) from e
+urllib3.exceptions.NameResolutionError: <urllib3.connection.HTTPSConnection object at 0x10ef92520>: Failed to resolve 'api.telegram.org' ([Errno 8] nodename nor servname provided, or not known)
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/requests/adapters.py", line 486, in send
+    resp = conn.urlopen(
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/urllib3/connectionpool.py", line 844, in urlopen
+    retries = retries.increment(
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/urllib3/util/retry.py", line 515, in increment
+    raise MaxRetryError(_pool, url, reason) from reason  # type: ignore[arg-type]
+urllib3.exceptions.MaxRetryError: HTTPSConnectionPool(host='api.telegram.org', port=443): Max retries exceeded with url: /bot6863293806:AAH3rusajaRMnCL82Og4HlCvPFDzOBh4dVw/getMe (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x10ef92520>: Failed to resolve 'api.telegram.org' ([Errno 8] nodename nor servname provided, or not known)"))
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/telebot/__init__.py", line 955, in infinity_polling
+    self.polling(non_stop=True, timeout=timeout, long_polling_timeout=long_polling_timeout,
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/telebot/__init__.py", line 1040, in polling
+    logger.info('Starting your bot with username: [@%s]', self.user.username)
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/telebot/__init__.py", line 273, in user
+    self._user = self.get_me()
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/telebot/__init__.py", line 1236, in get_me
+    result = apihelper.get_me(self.token)
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/telebot/apihelper.py", line 196, in get_me
+    return _make_request(token, method_url)
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/telebot/apihelper.py", line 156, in _make_request
+    result = _get_req_session().request(
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/requests/sessions.py", line 589, in request
+    resp = self.send(prep, **send_kwargs)
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/requests/sessions.py", line 703, in send
+    r = adapter.send(request, **kwargs)
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/requests/adapters.py", line 519, in send
+    raise ConnectionError(e, request=request)
+requests.exceptions.ConnectionError: HTTPSConnectionPool(host='api.telegram.org', port=443): Max retries exceeded with url: /bot6863293806:AAH3rusajaRMnCL82Og4HlCvPFDzOBh4dVw/getMe (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x10ef92520>: Failed to resolve 'api.telegram.org' ([Errno 8] nodename nor servname provided, or not known)"))
+
+2024-03-12 19:40:26,790 [ERROR]: Infinity polling: polling exited
+2024-03-12 19:40:26,792 [ERROR]: Break infinity polling
+2024-03-12 19:41:55,322 [ERROR]: Infinity polling: polling exited
+2024-03-12 19:41:55,322 [ERROR]: Break infinity polling
+2024-03-12 19:42:42,056 [ERROR]: Infinity polling: polling exited
+2024-03-12 19:42:42,057 [ERROR]: Break infinity polling
+2024-03-12 19:43:01,258 [ERROR]: Произошла ошибка: [Errno 2] No such file or directory: '/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/helpmanbot/Instructions/1/2'
+2024-03-12 19:50:22,714 [ERROR]: Infinity polling: polling exited
+2024-03-12 19:50:22,715 [ERROR]: Break infinity polling
+2024-03-12 19:50:45,796 [ERROR]: Произошла ошибка: [Errno 2] No such file or directory: '/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/helpmanbot/Instructions/1/1'
+2024-03-12 19:50:55,353 [ERROR]: Произошла ошибка: [Errno 2] No such file or directory: '/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/helpmanbot/Instructions/1/1'
+2024-03-12 19:51:30,740 [ERROR]: Произошла ошибка: CustomUser matching query does not exist.
+2024-03-12 19:54:35,397 [ERROR]: Infinity polling: polling exited
+2024-03-12 19:54:35,398 [ERROR]: Break infinity polling
+2024-03-12 19:55:00,979 [ERROR]: Произошла ошибка: [Errno 2] No such file or directory: '/start'
+2024-03-12 19:55:18,518 [ERROR]: Произошла ошибка: [Errno 2] No such file or directory: '/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/helpmanbot/Instructions/1/1'
+2024-03-12 19:55:33,518 [ERROR]: Произошла ошибка: [Errno 2] No such file or directory: '/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/helpmanbot/Instructions/2/2'
+2024-03-12 19:59:38,321 [ERROR]: Infinity polling: polling exited
+2024-03-12 19:59:38,321 [ERROR]: Break infinity polling
+2024-03-12 20:00:00,003 [ERROR]: Произошла ошибка: [Errno 2] No such file or directory: '/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/helpmanbot/Instructions/1/1'
+2024-03-12 20:02:12,829 [ERROR]: Infinity polling: polling exited
+2024-03-12 20:02:12,834 [ERROR]: Break infinity polling
+2024-03-12 20:02:31,616 [ERROR]: Произошла ошибка: [Errno 2] No such file or directory: '/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/helpmanbot/Instructions/1/1'
+2024-03-12 20:06:01,523 [ERROR]: Infinity polling: polling exited
+2024-03-12 20:06:01,525 [ERROR]: Break infinity polling
+2024-03-12 20:07:54,936 [ERROR]: Infinity polling: polling exited
+2024-03-12 20:07:54,938 [ERROR]: Break infinity polling
+2024-03-12 20:09:08,973 [ERROR]: Произошла ошибка: [Errno 2] No such file or directory: '/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/helpmanbot/Instructions/Инфо. Актуальные образы'

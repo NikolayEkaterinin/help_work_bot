@@ -6,7 +6,7 @@ def run_django_server():
     subprocess.run(["python", "manage.py", "runserver"])
 
 def run_telegram_bot():
-    subprocess.run(["python", "manage.py", "bot"])
+    subprocess.run(["python", "manage.py", "main"])
 
 if __name__ == "__main__":
     django_thread = threading.Thread(target=run_django_server)
