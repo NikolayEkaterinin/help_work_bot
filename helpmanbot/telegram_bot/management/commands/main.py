@@ -110,9 +110,9 @@ def handle_folder_or_file(message):
 
     try:
         # Получаем пользователя по id
-        user = CustomUser.objects.get(id=message.from_user.id)
+        user = CustomUser.objects.get(telegram_id=message.from_user.id)
         # Проверяем, заблокирован ли пользователь
-        if user.blok == 1:
+        if user.access == 1:
             # Пользователь заблокирован, отправляем сообщение с отказом в доступе
             bot.send_message(message.from_user.id, "Вам запрещен доступ к боту.")
             return

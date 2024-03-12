@@ -616,3 +616,10 @@ requests.exceptions.ConnectionError: HTTPSConnectionPool(host='api.telegram.org'
 2024-03-12 11:54:16,093 [ERROR]: Произошла ошибка: CustomUser matching query does not exist.
 2024-03-12 11:54:50,471 [ERROR]: Infinity polling: polling exited
 2024-03-12 11:54:50,479 [ERROR]: Break infinity polling
+2024-03-12 12:02:49,080 [ERROR]: Произошла ошибка: 'CustomUser' object has no attribute 'blok'
+2024-03-12 12:03:38,556 [ERROR]: Infinity polling: polling exited
+2024-03-12 12:03:38,564 [ERROR]: Break infinity polling
+2024-03-12 12:03:52,217 [ERROR]: Произошла ошибка: [Errno 2] No such file or directory: '/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/helpmanbot/Instructions/1/Назад'
+2024-03-12 12:03:56,050 [ERROR]: Произошла ошибка: [Errno 2] No such file or directory: '/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/helpmanbot/Instructions/2/Назад'
+2024-03-12 12:05:27,229 [ERROR]: Infinity polling: polling exited
+2024-03-12 12:05:27,258 [ERROR]: Break infinity polling
