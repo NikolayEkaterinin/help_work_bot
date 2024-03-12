@@ -48,31 +48,46 @@ base_folder = os.path.join(settings.BASE_DIR, 'Instructions')
 current_path = base_folder
 
 
+from django.core.exceptions import ObjectDoesNotExist
+
+# Обработчик команды /start
 @bot.message_handler(commands=['start'])
 def handle_start(message):
-    # Получаем информацию о пользователе из объекта сообщения
-    user_id = message.from_user.id
-    username = message.from_user.username
-    first_name = message.from_user.first_name
-    last_name = message.from_user.last_name
+    try:
+        # Получаем информацию о пользователе из объекта сообщения
+        user_id = message.from_user.id
+        username = message.from_user.username
+        first_name = message.from_user.first_name
+        last_name = message.from_user.last_name
 
-    # Создаем или обновляем пользователя в базе данных
-    user, created = CustomUser.objects.get_or_create(
-        telegram_id=user_id,
-        defaults={'username': username, 'first_name': first_name,
-                  'last_name': last_name, 'access': 1}
-    )
+        # Пытаемся получить пользователя из базы данных
+        try:
+            user = CustomUser.objects.get(telegram_id=user_id)
+        except ObjectDoesNotExist:
+            # Если пользователя нет, создаем новую запись с access = 1
+            user = CustomUser.objects.create(
+                telegram_id=user_id,
+                username=username,
+                first_name=first_name,
+                last_name=last_name,
+                access=1
+            )
 
-    # Проверяем, заблокирован ли пользователь
-    if user.access == 1:
-        # Пользователь заблокирован, отправляем сообщение с отказом в доступе
-        bot.send_message(user_id, f'''Вам запрещен доступ к боту. Необходимо обратиться к вашему старшему инженеру для
-        получения доступа. Обязательно необходимо предоставить Ваш ID.''')
-        bot.send_message(user_id, f'Ваш ID {user_id}')
-        return
+        # Проверяем, заблокирован ли пользователь
+        if user.access == 1:
+            # Пользователь заблокирован, отправляем сообщение с отказом в доступе
+            bot.send_message(user_id, f'''Вам запрещен доступ к боту. Необходимо обратиться к вашему старшему инженеру для
+            получения доступа. Обязательно необходимо предоставить Ваш ID.''')
+            bot.send_message(user_id, f'Ваш ID {user_id}')
+            return
 
-    # После успешной авторизации отправляем клавиатуру с папками и файлами
-    send_keyboard(message)
+        # После успешной авторизации отправляем клавиатуру с папками и файлами
+        send_keyboard(message)
+
+    except Exception as e:
+        logging.error(f"Произошла ошибка: {e}")
+        bot.send_message(message.from_user.id, "Произошла ошибка при выполнении операции. Пожалуйста, попробуйте еще раз.")
+
 
 
 def send_keyboard(message):

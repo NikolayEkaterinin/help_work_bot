@@ -851,3 +851,7 @@ requests.exceptions.ConnectionError: HTTPSConnectionPool(host='api.telegram.org'
 2024-03-12 20:07:54,936 [ERROR]: Infinity polling: polling exited
 2024-03-12 20:07:54,938 [ERROR]: Break infinity polling
 2024-03-12 20:09:08,973 [ERROR]: Произошла ошибка: [Errno 2] No such file or directory: '/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/helpmanbot/Instructions/Инфо. Актуальные образы'
+2024-03-12 20:12:12,771 [ERROR]: Произошла ошибка: A request to the Telegram API was unsuccessful. Error code: 400. Description: Bad Request: file must be non-empty
+2024-03-12 20:16:13,429 [ERROR]: Infinity polling: polling exited
+2024-03-12 20:16:13,432 [ERROR]: Break infinity polling
+2024-03-12 20:18:09,109 [ERROR]: Произошла ошибка: [Errno 2] No such file or directory: '/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/helpmanbot/Instructions/1/1'
