@@ -138,6 +138,43 @@ def process_29_network_handler(message):
     # Отправляем результат обработки пользователю
     bot.send_message(message.chat.id, response)
 
+# Обработчик кнопки "Инфо"
+@bot.message_handler(
+    func=lambda message: message.text == 'Инфо. Актуальные образы')
+def handle_info(message):
+    try:
+        # Получаем все объекты модели Image
+        images = Image.objects.all()
+
+        if images.exists():
+            info_messages = []
+            for image in images:
+                info_message = f"Актуальные образы {image.ts} :\n"
+                info_message += f"\n"
+                info_message += f"\n"
+                info_message += f"BO: {image.bo}\n"
+                info_message += f"\n"
+                info_message += f"POS все кроме HP и NCR XR4: {image.pos}\n"
+                info_message += f"\n"
+                info_message += f"POS HP и NCR XR4: {image.sco}\n"
+                info_message += f"\n"
+                info_message += f"КСО: {image.pc}\n"
+                info_message += f"\n"
+                info_message += f"PC: {image.pc}\n"
+                info_messages.append(info_message)
+
+            # Отправляем сообщения с информацией
+            for info_message in info_messages:
+                bot.send_message(message.from_user.id, info_message)
+        else:
+            bot.send_message(message.from_user.id,
+                             "В таблице images нет данных для отображения.")
+
+    except Exception as e:
+        logging.error(f"Произошла ошибка: {e}")
+        bot.send_message(message.from_user.id,
+                         "Произошла ошибка при выполнении операции. Пожалуйста, попробуйте еще раз.")
+
 
 # Обработчик кнопок с папками и файлами
 @bot.message_handler(func=lambda message: True)
