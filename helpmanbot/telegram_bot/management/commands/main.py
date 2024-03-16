@@ -10,6 +10,8 @@ from telegram_bot.models import CustomUser, Image
 
 from telegram_bot.views import process_29_network
 
+from send_mail.models import Item
+
 # Загрузка переменных окружения
 load_dotenv()
 
@@ -103,6 +105,7 @@ def send_keyboard(message):
     if current_path == base_folder:
         keyboard.add('Инфо. Актуальные образы')
         keyboard.add('29 сеть')
+        keyboard.add('Обращение по ФР')
 
     # Добавляем кнопку "Назад", если текущий путь не является базовым каталогом
     if current_path != base_folder:
@@ -117,6 +120,61 @@ def send_keyboard(message):
     # Отправляем клавиатуру с содержимым папки
     bot.send_message(message.from_user.id, "Выберите папку или файл:",
                      reply_markup=keyboard)
+
+
+# Обработчик кнопки "Обращение по ФР"
+@bot.message_handler(func=lambda message: message.text == 'Обращение по ФР')
+def handle_fr_inquiry(message):
+    keyboard = telebot.types.InlineKeyboardMarkup()
+    button_atol = telebot.types.InlineKeyboardButton(text="АТОЛ", callback_data="atol")
+    button_shtrih = telebot.types.InlineKeyboardButton(text="ШТРИХ", callback_data="shtrih")
+    keyboard.row(button_atol, button_shtrih)
+    bot.send_message(message.chat.id, "Добрый день! Выберите производителя ФР:", reply_markup=keyboard)
+
+
+# Обработчик выбора производителя ФР
+@bot.callback_query_handler(func=lambda call: call.data in ["atol", "shtrih"])
+def handle_fr_vendor_selection(call):
+    recipient_email = ""
+    if call.data == "atol":
+        handle_fr_vendor_selection(call)
+        recipient_email = "eh37@ya.ru"
+    elif call.data == "shtrih":
+        handle_fr_vendor_selection(call)
+        recipient_email = "n.ekaterinin@souyz76.ru"
+        # Продолжайте обработку для производителя "ШТРИХ" здесь
+
+# Обработчик выбора производителя ФР "АТОЛ"
+@bot.callback_query_handler(func=lambda call: call.data in ["atol", "shtrih"])
+def handle_fr_vendor_selection(call):
+    recipient_email = ""
+    if call.data == "atol":
+        keyboard = telebot.types.InlineKeyboardMarkup()
+        keyboard.row(
+            telebot.types.InlineKeyboardButton("Скрипт для смены заводского номера", callback_data="atol_serial_script")
+        )
+        keyboard.row(
+            telebot.types.InlineKeyboardButton("Получение лицензий", callback_data="atol_licenses")
+        )
+        keyboard.row(
+            telebot.types.InlineKeyboardButton("Скрипт для получения UIN", callback_data="atol_uin_script")
+        )
+        keyboard.row(
+            telebot.types.InlineKeyboardButton("Данная модель не поддерживается", callback_data="atol_not_supported")
+        )
+        keyboard.row(
+            telebot.types.InlineKeyboardButton("Мигратор на 5 платформу", callback_data="atol_platform_migrator")
+        )
+        bot.send_message(call.message.chat.id, "Выберите тему обращения:", reply_markup=keyboard)
+    elif call.data == "shtrih":
+        keyboard = telebot.types.InlineKeyboardMarkup()
+        keyboard.row(
+            telebot.types.InlineKeyboardButton("Смена заводского номера", callback_data="shtrih_serial_change")
+        )
+        keyboard.row(
+            telebot.types.InlineKeyboardButton("Получение лицензий", callback_data="shtrih_licenses")
+        )
+        bot.send_message(call.message.chat.id, "Выберите тему для обращения:", reply_markup=keyboard)
 
 
 @bot.message_handler(func=lambda message: message.text == '29 сеть')
