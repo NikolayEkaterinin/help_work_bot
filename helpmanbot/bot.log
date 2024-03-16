@@ -32233,3 +32233,11 @@ Traceback (most recent call last):
     raise ApiTelegramException(method_name, result, result_json)
 telebot.apihelper.ApiTelegramException: A request to the Telegram API was unsuccessful. Error code: 400. Description: Bad Request: message is too long
 
+2024-03-16 20:58:19,116 [ERROR]: Infinity polling: polling exited
+2024-03-16 20:58:19,118 [ERROR]: Break infinity polling
+2024-03-16 21:00:54,026 [ERROR]: Infinity polling: polling exited
+2024-03-16 21:00:54,034 [ERROR]: Break infinity polling
+2024-03-16 21:02:01,707 [ERROR]: Infinity polling: polling exited
+2024-03-16 21:02:01,709 [ERROR]: Break infinity polling
+2024-03-16 21:07:28,520 [ERROR]: Infinity polling: polling exited
+2024-03-16 21:07:28,522 [ERROR]: Break infinity polling

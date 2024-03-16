@@ -10,7 +10,12 @@ from telegram_bot.models import CustomUser, Image
 
 from telegram_bot.views import process_29_network
 
-from send_mail.models import Item
+from send_mail.email_templates import EmailTemplates
+
+
+email_templates = EmailTemplates()
+descriptions = {}
+
 
 # Загрузка переменных окружения
 load_dotenv()
@@ -175,6 +180,45 @@ def handle_fr_vendor_selection(call):
             telebot.types.InlineKeyboardButton("Получение лицензий", callback_data="shtrih_licenses")
         )
         bot.send_message(call.message.chat.id, "Выберите тему для обращения:", reply_markup=keyboard)
+
+@bot.callback_query_handler(func=lambda call: call.data == "atol_serial_script")
+def handle_email_button(call):
+    # Запрашиваем модель и номера ЗН ККТ у пользователя
+    bot.send_message(call.message.chat.id, "Введите модель ФР:")
+    bot.register_next_step_handler(call.message, ask_model)
+
+
+def ask_model(message):
+    model = message.text
+    bot.send_message(message.chat.id, "Введите номер ЗН ККТ в ремонте:")
+    bot.register_next_step_handler(message, ask_repair_sn, model)
+
+
+def ask_repair_sn(message, model):
+    repair_sn = message.text
+    bot.send_message(message.chat.id, "Введите номер ЗН ККТ подменная:")
+    bot.register_next_step_handler(message, ask_substitute_sn, model, repair_sn)
+
+
+def ask_substitute_sn(message, model, repair_sn):
+    substitute_sn = message.text
+
+    # Получаем текст письма
+    template_key = "atol_serial_script"
+    email_text = email_templates.get_template(template_key)
+
+    # Заменяем заполнители в тексте письма на введенные пользователем данные
+    email_text = email_text.replace("model", model)
+    email_text = email_text.replace("repair_sn", repair_sn)
+    email_text = email_text.replace("substitute_sn", substitute_sn)
+
+    # Сохраняем полученный текст письма в переменной
+    descriptions["atol_serial_script"] = email_text
+
+    # Отправляем письмо с заполненными данными
+    bot.send_message(message.chat.id, email_text)
+
+
 
 
 @bot.message_handler(func=lambda message: message.text == '29 сеть')

@@ -1,0 +1,54 @@
+2023-12-07 12:42:17,022 [INFO]: Start polling.
+2023-12-07 12:42:44,110 [ERROR]: Task exception was never retrieved
+future: <Task finished name='Task-6' coro=<Dispatcher._process_polling_updates() done, defined at /Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/aiogram/dispatcher/dispatcher.py:407> exception=FileNotFoundError(2, 'No such file or directory')>
+Traceback (most recent call last):
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/aiogram/dispatcher/dispatcher.py", line 415, in _process_polling_updates
+    for responses in itertools.chain.from_iterable(await self.process_updates(updates, fast)):
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/aiogram/dispatcher/dispatcher.py", line 235, in process_updates
+    return await asyncio.gather(*tasks)
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/aiogram/dispatcher/handler.py", line 117, in notify
+    response = await handler_obj.handler(*args, **partial_data)
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/aiogram/dispatcher/dispatcher.py", line 256, in process_update
+    return await self.message_handlers.notify(update.message)
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/aiogram/dispatcher/handler.py", line 117, in notify
+    response = await handler_obj.handler(*args, **partial_data)
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/main.py", line 85, in handle_start
+    for item in os.listdir(current_path):
+FileNotFoundError: [Errno 2] No such file or directory: 'Instr'
+2023-12-07 12:43:56,815 [ERROR]: Task exception was never retrieved
+future: <Task finished name='Task-12' coro=<Dispatcher._process_polling_updates() done, defined at /Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/aiogram/dispatcher/dispatcher.py:407> exception=FileNotFoundError(2, 'No such file or directory')>
+Traceback (most recent call last):
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/aiogram/dispatcher/dispatcher.py", line 415, in _process_polling_updates
+    for responses in itertools.chain.from_iterable(await self.process_updates(updates, fast)):
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/aiogram/dispatcher/dispatcher.py", line 235, in process_updates
+    return await asyncio.gather(*tasks)
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/aiogram/dispatcher/handler.py", line 117, in notify
+    response = await handler_obj.handler(*args, **partial_data)
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/aiogram/dispatcher/dispatcher.py", line 256, in process_update
+    return await self.message_handlers.notify(update.message)
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/aiogram/dispatcher/handler.py", line 117, in notify
+    response = await handler_obj.handler(*args, **partial_data)
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/main.py", line 85, in handle_start
+    for item in os.listdir(current_path):
+FileNotFoundError: [Errno 2] No such file or directory: 'Instr'
+2023-12-07 12:44:40,301 [ERROR]: Task exception was never retrieved
+future: <Task finished name='Task-40' coro=<Dispatcher._process_polling_updates() done, defined at /Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/aiogram/dispatcher/dispatcher.py:407> exception=FileNotFoundError(2, 'No such file or directory')>
+Traceback (most recent call last):
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/aiogram/dispatcher/dispatcher.py", line 415, in _process_polling_updates
+    for responses in itertools.chain.from_iterable(await self.process_updates(updates, fast)):
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/aiogram/dispatcher/dispatcher.py", line 235, in process_updates
+    return await asyncio.gather(*tasks)
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/aiogram/dispatcher/handler.py", line 117, in notify
+    response = await handler_obj.handler(*args, **partial_data)
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/aiogram/dispatcher/dispatcher.py", line 256, in process_update
+    return await self.message_handlers.notify(update.message)
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/aiogram/dispatcher/handler.py", line 117, in notify
+    response = await handler_obj.handler(*args, **partial_data)
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/main.py", line 85, in handle_start
+    for item in os.listdir(current_path):
+FileNotFoundError: [Errno 2] No such file or directory: 'Instr'
+2023-12-07 12:45:45,826 [INFO]: Бот остановлен пользователем.
+2023-12-07 12:45:48,998 [INFO]: Start polling.
+2023-12-07 12:50:36,735 [INFO]: Бот остановлен пользователем.
+2023-12-07 13:04:16,561 [INFO]: Start polling.
+2023-12-07 13:04:56,517 [INFO]: Бот остановлен пользователем.
