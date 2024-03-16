@@ -1,8 +1,9 @@
-from aiogram.types import Message
-from .models import IPAddresses
+from django.http import JsonResponse
+from .models import IPAddresses  # Импортируем модель IPAddresses
 
+def process_29_network(request):
+    sap = request  # SAP для сети "29", замените на свои нужды
 
-async def process_sap_request(message: Message, sap: str):
     try:
         ip_addresses = IPAddresses.objects.filter(sap=sap)
         last_part = [ip.ip_address.split(".")[-1] for ip in ip_addresses]
@@ -15,18 +16,12 @@ async def process_sap_request(message: Message, sap: str):
             dict_entry = {f'Сервер {i + 1}': '.'.join(ip_parts)}  # Создание словаря с именем сервера и адресом
             message_list.append(dict_entry)  # Добавление словаря в список message
 
-        for message_item in message_list:
-            await message.answer(message_item)
-
-        # для сети с последним октетом 0
-        if int(last_part[0]) == 0:
+        # Обработка сетей VLAN 12, 10 и т. д.
+        if int(last_part[0]) == 0:  # Для сети с последним октетом 0
             message_vlan12 = [
                 'VLAN 12 - Для сервера магазина и удаленного управления',
-                {
-                    'Плата удаленного управления резервного сервера': '.'.join(
-                        first_part[0] + ['3'])},
-                {'Плата удаленного управления сервером': '.'.join(
-                    first_part[0] + ['4'])},
+                {'Плата удаленного управления резервного сервера': '.'.join(first_part[0] + ['3'])},
+                {'Плата удаленного управления сервером': '.'.join(first_part[0] + ['4'])},
                 {'Сервер BO резервный': '.'.join(first_part[0] + ['5'])},
                 {'Сервер BP': '.'.join(first_part[0] + ['6'])},
                 {'Шлюз': '.'.join(first_part[0] + ['1'])},
@@ -35,8 +30,7 @@ async def process_sap_request(message: Message, sap: str):
             message_vlan10 = [
                 'VLAN 10 - для CashControl',
                 {'Сервер CashControl': '.'.join(first_part[0] + ['11'])},
-                {'2й Сервер CashControl': '.'.join(
-                    first_part[0] + ['12'])},
+                {'2й Сервер CashControl': '.'.join(first_part[0] + ['12'])},
                 {'Шлюз': '.'.join(first_part[0] + ['9'])},
                 {'Маска': '255.255.255.248'}
             ]
@@ -51,39 +45,29 @@ async def process_sap_request(message: Message, sap: str):
             message_vlan4 = [
                 'VLAN 4 - для устройств, которым не требуется взаимодействие с сервером BO',
                 {'Сервер радио 5': '.'.join(first_part[0] + ['34'])},
-                {'Биометрический терминал': '.'.join(
-                    first_part[0] + ['44'])},
-                {'Сервер для видеоаналитики СБ': '.'.join(
-                    first_part[0] + ['45'])},
-                {'ЕСУМ (инфокиоск, LED-панель': '.'.join(
-                    first_part[0] + ['46-52'])},
+                {'Биометрический терминал': '.'.join(first_part[0] + ['44'])},
+                {'Сервер для видеоаналитики СБ': '.'.join(first_part[0] + ['45'])},
+                {'ЕСУМ (инфокиоск, LED-панель': '.'.join(first_part[0] + ['46-52'])},
                 {'Хлебопечи': '.'.join(first_part[0] + ['54-55'])},
-                {'Оборудование ПЭС(ЦХМ)': '.'.join(
-                    first_part[0] + ['59'])},
-                {'Оборудование ПЭС(АСКУЭ)АССД': '.'.join(
-                    first_part[0] + ['60'])},
-                {'Оборудование ПЭС(Умный щит)': '.'.join(
-                    first_part[0] + ['61'])},
+                {'Оборудование ПЭС(ЦХМ)': '.'.join(first_part[0] + ['59'])},
+                {'Оборудование ПЭС(АСКУЭ)АССД': '.'.join(first_part[0] + ['60'])},
+                {'Оборудование ПЭС(Умный щит)': '.'.join(first_part[0] + ['61'])},
                 {'Шлюз': '.'.join(first_part[0] + ['33'])},
                 {'Маска': '255.255.255.224'}
-
             ]
             message_vlan8 = [
                 'VLAN 8 - для устройств, которым требуется доступ по UDP к системам снаружи магазина и к серверу BO',
                 {'МФУ': '.'.join(first_part[0] + ['18'])},
                 {'Принтер': '.'.join(first_part[0] + ['19'])},
-                {'Сервер электронных ценников ESL': '.'.join(
-                    first_part[0] + ['25'])},
-                {'Точки доступа электронных ценников': '.'.join(
-                    first_part[0] + ['26-30'])},
+                {'Сервер электронных ценников ESL': '.'.join(first_part[0] + ['25'])},
+                {'Точки доступа электронных ценников': '.'.join(first_part[0] + ['26-30'])},
                 {'Шлюз': '.'.join(first_part[0] + ['17'])},
                 {'Маска': '255.255.255.240'}
             ]
             message_vlan2 = [
                 'VLAN 2 - для устройств, подключаемых по проводу и которым не требуется прямой доступ к внешним системам',
                 {'Стационарный термопринтер': '192.168.3.25-26'},
-                {
-                    'Весы для касс самообслуживания (SWS)(Даркстор)': '192.168.3.30-32'},
+                {'Весы для касс самообслуживания (SWS)(Даркстор)': '192.168.3.30-32'},
                 {'Прайсчекер WINCE': '192.168.3.100-103'},
                 {'Шлюз': '192.168.3.1'},
                 {'Маска': '255.255.255.0'}
@@ -91,21 +75,22 @@ async def process_sap_request(message: Message, sap: str):
             message_vlan33 = [
                 'VLAN 33 - для устройств, подключаемых по Wi-Fi и которым не требуется прямой доступ к внешним системам',
                 {'Мобильный принтер': '192.168.1.10-14'},
-                {
-                    'Весы для касс самообслуживания (SWS)(Даркстор)': '192.168.1.16-18'},
+                {'Весы для касс самообслуживания (SWS)(Даркстор)': '192.168.1.16-18'},
                 {'Шлюз': '192.168.1.1'},
                 {'Маска': '255.255.255.0'}
             ]
-            await message.answer(message_vlan12)
-            await message.answer(message_vlan10)
-            await message.answer(message_vlan6)
-            await message.answer(message_vlan4)
-            await message.answer(message_vlan8)
-            await message.answer(message_vlan2)
-            await message.answer(message_vlan33)
 
-        # для сети с последним октетом 128
-        elif int(last_part[0]) == 128:
+            return JsonResponse({
+                "message_vlan12": message_vlan12,
+                "message_vlan10": message_vlan10,
+                "message_vlan6": message_vlan6,
+                "message_vlan4": message_vlan4,
+                "message_vlan8": message_vlan8,
+                "message_vlan2": message_vlan2,
+                "message_vlan33": message_vlan33
+            }, safe=False)
+
+        elif int(last_part[0]) == 128:  # Для сети с последним октетом 128
             message_vlan12 = [
                 'VLAN 12 - Для сервера магазина и удаленного управления',
                 {
@@ -182,15 +167,21 @@ async def process_sap_request(message: Message, sap: str):
                 {'Шлюз': '192.168.1.1'},
                 {'Маска': '255.255.255.0'}
             ]
-            await message.answer(message_vlan12)
-            await message.answer(message_vlan10)
-            await message.answer(message_vlan6)
-            await message.answer(message_vlan4)
-            await message.answer(message_vlan8)
-            await message.answer(message_vlan2)
-            await message.answer(message_vlan33)
+            return JsonResponse({
+                "message_vlan12": message_vlan12,
+                "message_vlan10": message_vlan10,
+                "message_vlan6": message_vlan6,
+                "message_vlan4": message_vlan4,
+                "message_vlan8": message_vlan8,
+                "message_vlan2": message_vlan2,
+                "message_vlan33": message_vlan33
+            }, safe=False)
+
         else:
-            await message.answer('Данный объект ещё не переведен')
+            return JsonResponse({"error": "Данный объект ещё не переведен"}, status=400)
+
+    except Exception as e:
+        return JsonResponse({"error": str(e)}, status=500)
 
     except:
         await message.answer('Введенное значение не является SAP')

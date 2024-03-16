@@ -8,6 +8,8 @@ from dotenv import load_dotenv
 import telebot
 from telegram_bot.models import CustomUser, Image
 
+from telegram_bot.views import process_29_network
+
 # Загрузка переменных окружения
 load_dotenv()
 
@@ -48,30 +50,23 @@ base_folder = os.path.join(settings.BASE_DIR, 'Instructions')
 current_path = base_folder
 
 
-from django.core.exceptions import ObjectDoesNotExist
-
 # Обработчик команды /start
 @bot.message_handler(commands=['start'])
 def handle_start(message):
     try:
         # Получаем информацию о пользователе из объекта сообщения
         user_id = message.from_user.id
-        username = message.from_user.username
-        first_name = message.from_user.first_name
-        last_name = message.from_user.last_name
 
         # Пытаемся получить пользователя из базы данных
-        try:
-            user = CustomUser.objects.get(telegram_id=user_id)
-        except ObjectDoesNotExist:
-            # Если пользователя нет, создаем новую запись с access = 1
-            user = CustomUser.objects.create(
-                telegram_id=user_id,
-                username=username,
-                first_name=first_name,
-                last_name=last_name,
-                access=1
-            )
+        user, created = CustomUser.objects.get_or_create(
+            telegram_id=user_id,
+            defaults={
+                'username': message.from_user.username,
+                'first_name': message.from_user.first_name,
+                'last_name': message.from_user.last_name,
+                'access': 1
+            }
+        )
 
         # Проверяем, заблокирован ли пользователь
         if user.access == 1:
@@ -87,7 +82,6 @@ def handle_start(message):
     except Exception as e:
         logging.error(f"Произошла ошибка: {e}")
         bot.send_message(message.from_user.id, "Произошла ошибка при выполнении операции. Пожалуйста, попробуйте еще раз.")
-
 
 
 def send_keyboard(message):
@@ -125,6 +119,26 @@ def send_keyboard(message):
                      reply_markup=keyboard)
 
 
+@bot.message_handler(func=lambda message: message.text == '29 сеть')
+def handle_29_network(message):
+    # Запрашиваем у пользователя SAP магазина
+    msg = bot.send_message(message.chat.id, "Введите SAP магазина:")
+    bot.register_next_step_handler(msg, process_29_network_handler)
+
+
+def process_29_network_handler(message):
+
+    # Получаем SAP магазина от пользователя
+    sap = message.text
+    chat_id = message.chat.id
+
+    # Вызываем функцию process_29_network с полученным SAP
+    response = process_29_network(sap, bot, chat_id)
+
+    # Отправляем результат обработки пользователю
+    bot.send_message(message.chat.id, response)
+
+
 # Обработчик кнопок с папками и файлами
 @bot.message_handler(func=lambda message: True)
 def handle_folder_or_file(message):
@@ -156,18 +170,8 @@ def handle_folder_or_file(message):
             current_path = chosen_item_path
             send_keyboard(message)
         else:
-            file_size = os.path.getsize(chosen_item_path)
-            # Проверяем, если размер файла больше 50 МБ (в байтах)
-            if file_size > 50 * 1024 * 1024:
-                bot.send_message(message.from_user.id, "Файлы размером более 50 МБ нельзя скачивать."
-                                                        "Для скачивания файлов большого объема,"
-                                                        "подключитесь к FTP в соответствующий раздел")
-                logging.info(f"Запрос файла объемом более 50 МБ {current_path}, файл {chosen_item}"
-                             f" запросил пользователь ID {message.from_user.id}")
-            else:
-                # Если выбран файл, и его размер допустим, отправляем его пользователю
-                with open(chosen_item_path, 'rb') as f:
-                    bot.send_document(message.from_user.id, f)
+            # Если сообщение не соответствует названию каталога, игнорируем его
+            return
 
     except Exception as e:
         # Записываем ошибку в лог и уведомляем пользователя о неполадке
