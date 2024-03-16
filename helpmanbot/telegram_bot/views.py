@@ -2,7 +2,7 @@ from django.http import JsonResponse
 from .models import IPAddresses
 import time
 
-
+# Расчет 29 сети
 def chunks(lst, n):
     """Разбивает список на куски по n элементов."""
     for i in range(0, len(lst), n):
@@ -45,9 +45,6 @@ def process_29_network(sap, bot, chat_id):
 
         for part in [0, 128]:
             if int(last_part[0]) == part:
-                print(part)
-                print(last_part)
-                print(first_part)
                 # VLAN 12
                 vlan_12_devices = [
                     {"Device": "Плата удаленного управления резервного сервера",
@@ -65,7 +62,6 @@ def process_29_network(sap, bot, chat_id):
                     "Description": "Для сервера магазина и удаленного управления",
                     "Devices": vlan_12_devices
                 })
-                print(vlan_12_devices)
 
                 # VLAN 10
                 vlan_10_devices = [
@@ -164,5 +160,6 @@ def process_29_network(sap, bot, chat_id):
         send_vlan_messages(bot, chat_id, vlan_messages)
         return JsonResponse({"messages": vlan_messages}, safe=False)
 
-    except Exception as e:
-        return JsonResponse({"error": str(e)}, status=500)
+    except Exception:
+        return "Что то пошло не так! Данное значение не является SAP или объект ещё не внесен в базу!"
+

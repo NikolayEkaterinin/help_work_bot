@@ -31701,3 +31701,341 @@ Traceback (most recent call last):
     raise ApiTelegramException(method_name, result, result_json)
 telebot.apihelper.ApiTelegramException: A request to the Telegram API was unsuccessful. Error code: 400. Description: Bad Request: message is too long
 
+2024-03-16 11:30:05,336 [ERROR]: Infinity polling: polling exited
+2024-03-16 11:30:05,339 [ERROR]: Break infinity polling
+2024-03-16 11:30:25,979 [ERROR]: Произошла ошибка: A request to the Telegram API was unsuccessful. Error code: 400. Description: Bad Request: file must be non-empty
+2024-03-16 11:30:38,237 [ERROR]: Infinity polling exception: HTTPSConnectionPool(host='api.telegram.org', port=443): Max retries exceeded with url: /bot6863293806:AAH3rusajaRMnCL82Og4HlCvPFDzOBh4dVw/getUpdates?offset=937875492&timeout=20 (Caused by ProxyError('Unable to connect to proxy', RemoteDisconnected('Remote end closed connection without response')))
+2024-03-16 11:30:38,241 [ERROR]: Exception traceback:
+Traceback (most recent call last):
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/urllib3/connectionpool.py", line 790, in urlopen
+    response = self._make_request(
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/urllib3/connectionpool.py", line 536, in _make_request
+    response = conn.getresponse()
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/urllib3/connection.py", line 454, in getresponse
+    httplib_response = super().getresponse()
+  File "/usr/local/Cellar/python@3.9/3.9.18/Frameworks/Python.framework/Versions/3.9/lib/python3.9/http/client.py", line 1377, in getresponse
+    response.begin()
+  File "/usr/local/Cellar/python@3.9/3.9.18/Frameworks/Python.framework/Versions/3.9/lib/python3.9/http/client.py", line 320, in begin
+    version, status, reason = self._read_status()
+  File "/usr/local/Cellar/python@3.9/3.9.18/Frameworks/Python.framework/Versions/3.9/lib/python3.9/http/client.py", line 289, in _read_status
+    raise RemoteDisconnected("Remote end closed connection without"
+http.client.RemoteDisconnected: Remote end closed connection without response
+
+The above exception was the direct cause of the following exception:
+
+urllib3.exceptions.ProxyError: ('Unable to connect to proxy', RemoteDisconnected('Remote end closed connection without response'))
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/requests/adapters.py", line 486, in send
+    resp = conn.urlopen(
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/urllib3/connectionpool.py", line 844, in urlopen
+    retries = retries.increment(
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/urllib3/util/retry.py", line 515, in increment
+    raise MaxRetryError(_pool, url, reason) from reason  # type: ignore[arg-type]
+urllib3.exceptions.MaxRetryError: HTTPSConnectionPool(host='api.telegram.org', port=443): Max retries exceeded with url: /bot6863293806:AAH3rusajaRMnCL82Og4HlCvPFDzOBh4dVw/getUpdates?offset=937875492&timeout=20 (Caused by ProxyError('Unable to connect to proxy', RemoteDisconnected('Remote end closed connection without response')))
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/telebot/__init__.py", line 955, in infinity_polling
+    self.polling(non_stop=True, timeout=timeout, long_polling_timeout=long_polling_timeout,
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/telebot/__init__.py", line 1043, in polling
+    self.__threaded_polling(non_stop=non_stop, interval=interval, timeout=timeout, long_polling_timeout=long_polling_timeout,
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/telebot/__init__.py", line 1118, in __threaded_polling
+    raise e
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/telebot/__init__.py", line 1073, in __threaded_polling
+    polling_thread.raise_exceptions()
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/telebot/util.py", line 108, in raise_exceptions
+    raise self.exception_info
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/telebot/util.py", line 90, in run
+    task(*args, **kwargs)
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/telebot/__init__.py", line 649, in __retrieve_updates
+    updates = self.get_updates(offset=(self.last_update_id + 1),
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/telebot/__init__.py", line 623, in get_updates
+    json_updates = apihelper.get_updates(self.token, offset, limit, timeout, allowed_updates, long_polling_timeout)
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/telebot/apihelper.py", line 321, in get_updates
+    return _make_request(token, method_url, params=payload)
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/telebot/apihelper.py", line 156, in _make_request
+    result = _get_req_session().request(
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/requests/sessions.py", line 589, in request
+    resp = self.send(prep, **send_kwargs)
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/requests/sessions.py", line 703, in send
+    r = adapter.send(request, **kwargs)
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/requests/adapters.py", line 513, in send
+    raise ProxyError(e, request=request)
+requests.exceptions.ProxyError: HTTPSConnectionPool(host='api.telegram.org', port=443): Max retries exceeded with url: /bot6863293806:AAH3rusajaRMnCL82Og4HlCvPFDzOBh4dVw/getUpdates?offset=937875492&timeout=20 (Caused by ProxyError('Unable to connect to proxy', RemoteDisconnected('Remote end closed connection without response')))
+
+2024-03-16 11:30:43,589 [ERROR]: Произошла ошибка: A request to the Telegram API was unsuccessful. Error code: 400. Description: Bad Request: file must be non-empty
+2024-03-16 11:30:47,165 [ERROR]: Произошла ошибка: A request to the Telegram API was unsuccessful. Error code: 400. Description: Bad Request: file must be non-empty
+2024-03-16 11:30:48,290 [ERROR]: Произошла ошибка: A request to the Telegram API was unsuccessful. Error code: 400. Description: Bad Request: file must be non-empty
+2024-03-16 11:30:50,657 [ERROR]: Произошла ошибка: A request to the Telegram API was unsuccessful. Error code: 400. Description: Bad Request: file must be non-empty
+2024-03-16 11:32:18,875 [ERROR]: Infinity polling: polling exited
+2024-03-16 11:32:18,878 [ERROR]: Break infinity polling
+2024-03-16 11:32:25,772 [ERROR]: Произошла ошибка: [Errno 2] No such file or directory: '/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/helpmanbot/Instructions/1.txt'
+2024-03-16 11:34:23,299 [ERROR]: Произошла ошибка: [Errno 2] No such file or directory: '/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/helpmanbot/Instructions/Инфо. Актуальные образы'
+2024-03-16 11:34:34,528 [ERROR]: Произошла ошибка: HTTPSConnectionPool(host='api.telegram.org', port=443): Max retries exceeded with url: /bot6863293806:AAH3rusajaRMnCL82Og4HlCvPFDzOBh4dVw/sendDocument?chat_id=545558953 (Caused by ProxyError('Unable to connect to proxy', RemoteDisconnected('Remote end closed connection without response')))
+2024-03-16 11:34:40,687 [ERROR]: Произошла ошибка: HTTPSConnectionPool(host='api.telegram.org', port=443): Max retries exceeded with url: /bot6863293806:AAH3rusajaRMnCL82Og4HlCvPFDzOBh4dVw/sendDocument?chat_id=545558953 (Caused by ProxyError('Unable to connect to proxy', RemoteDisconnected('Remote end closed connection without response')))
+2024-03-16 11:35:39,676 [ERROR]: Infinity polling exception: HTTPSConnectionPool(host='api.telegram.org', port=443): Max retries exceeded with url: /bot6863293806:AAH3rusajaRMnCL82Og4HlCvPFDzOBh4dVw/getUpdates?offset=937875506&timeout=20 (Caused by ProxyError('Unable to connect to proxy', RemoteDisconnected('Remote end closed connection without response')))
+2024-03-16 11:35:39,680 [ERROR]: Exception traceback:
+Traceback (most recent call last):
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/urllib3/connectionpool.py", line 790, in urlopen
+    response = self._make_request(
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/urllib3/connectionpool.py", line 536, in _make_request
+    response = conn.getresponse()
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/urllib3/connection.py", line 454, in getresponse
+    httplib_response = super().getresponse()
+  File "/usr/local/Cellar/python@3.9/3.9.18/Frameworks/Python.framework/Versions/3.9/lib/python3.9/http/client.py", line 1377, in getresponse
+    response.begin()
+  File "/usr/local/Cellar/python@3.9/3.9.18/Frameworks/Python.framework/Versions/3.9/lib/python3.9/http/client.py", line 320, in begin
+    version, status, reason = self._read_status()
+  File "/usr/local/Cellar/python@3.9/3.9.18/Frameworks/Python.framework/Versions/3.9/lib/python3.9/http/client.py", line 289, in _read_status
+    raise RemoteDisconnected("Remote end closed connection without"
+http.client.RemoteDisconnected: Remote end closed connection without response
+
+The above exception was the direct cause of the following exception:
+
+urllib3.exceptions.ProxyError: ('Unable to connect to proxy', RemoteDisconnected('Remote end closed connection without response'))
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/requests/adapters.py", line 486, in send
+    resp = conn.urlopen(
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/urllib3/connectionpool.py", line 844, in urlopen
+    retries = retries.increment(
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/urllib3/util/retry.py", line 515, in increment
+    raise MaxRetryError(_pool, url, reason) from reason  # type: ignore[arg-type]
+urllib3.exceptions.MaxRetryError: HTTPSConnectionPool(host='api.telegram.org', port=443): Max retries exceeded with url: /bot6863293806:AAH3rusajaRMnCL82Og4HlCvPFDzOBh4dVw/getUpdates?offset=937875506&timeout=20 (Caused by ProxyError('Unable to connect to proxy', RemoteDisconnected('Remote end closed connection without response')))
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/telebot/__init__.py", line 955, in infinity_polling
+    self.polling(non_stop=True, timeout=timeout, long_polling_timeout=long_polling_timeout,
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/telebot/__init__.py", line 1043, in polling
+    self.__threaded_polling(non_stop=non_stop, interval=interval, timeout=timeout, long_polling_timeout=long_polling_timeout,
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/telebot/__init__.py", line 1118, in __threaded_polling
+    raise e
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/telebot/__init__.py", line 1073, in __threaded_polling
+    polling_thread.raise_exceptions()
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/telebot/util.py", line 108, in raise_exceptions
+    raise self.exception_info
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/telebot/util.py", line 90, in run
+    task(*args, **kwargs)
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/telebot/__init__.py", line 649, in __retrieve_updates
+    updates = self.get_updates(offset=(self.last_update_id + 1),
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/telebot/__init__.py", line 623, in get_updates
+    json_updates = apihelper.get_updates(self.token, offset, limit, timeout, allowed_updates, long_polling_timeout)
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/telebot/apihelper.py", line 321, in get_updates
+    return _make_request(token, method_url, params=payload)
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/telebot/apihelper.py", line 156, in _make_request
+    result = _get_req_session().request(
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/requests/sessions.py", line 589, in request
+    resp = self.send(prep, **send_kwargs)
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/requests/sessions.py", line 703, in send
+    r = adapter.send(request, **kwargs)
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/requests/adapters.py", line 513, in send
+    raise ProxyError(e, request=request)
+requests.exceptions.ProxyError: HTTPSConnectionPool(host='api.telegram.org', port=443): Max retries exceeded with url: /bot6863293806:AAH3rusajaRMnCL82Og4HlCvPFDzOBh4dVw/getUpdates?offset=937875506&timeout=20 (Caused by ProxyError('Unable to connect to proxy', RemoteDisconnected('Remote end closed connection without response')))
+
+2024-03-16 11:36:37,044 [ERROR]: Произошла ошибка: [Errno 2] No such file or directory: '/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/helpmanbot/Instructions/Инфо. Актуальные образы'
+2024-03-16 11:36:38,337 [ERROR]: Произошла ошибка: [Errno 2] No such file or directory: '/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/helpmanbot/Instructions/29 сеть'
+2024-03-16 11:36:41,669 [ERROR]: Произошла ошибка: [Errno 2] No such file or directory: '/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/helpmanbot/Instructions/29 сеть'
+2024-03-16 11:40:18,968 [ERROR]: Infinity polling: polling exited
+2024-03-16 11:40:18,971 [ERROR]: Break infinity polling
+2024-03-16 11:40:35,923 [ERROR]: Threaded polling exception: A request to the Telegram API was unsuccessful. Error code: 400. Description: Bad Request: message is too long
+2024-03-16 11:40:35,926 [ERROR]: Exception traceback:
+Traceback (most recent call last):
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/telebot/__init__.py", line 1074, in __threaded_polling
+    self.worker_pool.raise_exceptions()
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/telebot/util.py", line 147, in raise_exceptions
+    raise self.exception_info
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/telebot/util.py", line 90, in run
+    task(*args, **kwargs)
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/helpmanbot/telegram_bot/management/commands/main.py", line 139, in process_29_network_handler
+    bot.send_message(message.chat.id, response)
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/telebot/__init__.py", line 1549, in send_message
+    apihelper.send_message(
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/telebot/apihelper.py", line 264, in send_message
+    return _make_request(token, method_url, params=payload, method='post')
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/telebot/apihelper.py", line 162, in _make_request
+    json_result = _check_result(method_name, result)
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/telebot/apihelper.py", line 189, in _check_result
+    raise ApiTelegramException(method_name, result, result_json)
+telebot.apihelper.ApiTelegramException: A request to the Telegram API was unsuccessful. Error code: 400. Description: Bad Request: message is too long
+
+2024-03-16 11:41:06,492 [ERROR]: Threaded polling exception: A request to the Telegram API was unsuccessful. Error code: 400. Description: Bad Request: message is too long
+2024-03-16 11:41:06,494 [ERROR]: Exception traceback:
+Traceback (most recent call last):
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/telebot/__init__.py", line 1074, in __threaded_polling
+    self.worker_pool.raise_exceptions()
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/telebot/util.py", line 147, in raise_exceptions
+    raise self.exception_info
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/telebot/util.py", line 90, in run
+    task(*args, **kwargs)
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/helpmanbot/telegram_bot/management/commands/main.py", line 139, in process_29_network_handler
+    bot.send_message(message.chat.id, response)
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/telebot/__init__.py", line 1549, in send_message
+    apihelper.send_message(
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/telebot/apihelper.py", line 264, in send_message
+    return _make_request(token, method_url, params=payload, method='post')
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/telebot/apihelper.py", line 162, in _make_request
+    json_result = _check_result(method_name, result)
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/telebot/apihelper.py", line 189, in _check_result
+    raise ApiTelegramException(method_name, result, result_json)
+telebot.apihelper.ApiTelegramException: A request to the Telegram API was unsuccessful. Error code: 400. Description: Bad Request: message is too long
+
+2024-03-16 11:42:45,616 [ERROR]: Infinity polling: polling exited
+2024-03-16 11:42:45,617 [ERROR]: Break infinity polling
+2024-03-16 11:43:11,611 [ERROR]: Infinity polling exception: HTTPSConnectionPool(host='api.telegram.org', port=443): Max retries exceeded with url: /bot6863293806:AAH3rusajaRMnCL82Og4HlCvPFDzOBh4dVw/getUpdates?offset=937875527&timeout=20 (Caused by ProxyError('Unable to connect to proxy', RemoteDisconnected('Remote end closed connection without response')))
+2024-03-16 11:43:11,612 [ERROR]: Exception traceback:
+Traceback (most recent call last):
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/urllib3/connectionpool.py", line 790, in urlopen
+    response = self._make_request(
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/urllib3/connectionpool.py", line 536, in _make_request
+    response = conn.getresponse()
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/urllib3/connection.py", line 454, in getresponse
+    httplib_response = super().getresponse()
+  File "/usr/local/Cellar/python@3.9/3.9.18/Frameworks/Python.framework/Versions/3.9/lib/python3.9/http/client.py", line 1377, in getresponse
+    response.begin()
+  File "/usr/local/Cellar/python@3.9/3.9.18/Frameworks/Python.framework/Versions/3.9/lib/python3.9/http/client.py", line 320, in begin
+    version, status, reason = self._read_status()
+  File "/usr/local/Cellar/python@3.9/3.9.18/Frameworks/Python.framework/Versions/3.9/lib/python3.9/http/client.py", line 289, in _read_status
+    raise RemoteDisconnected("Remote end closed connection without"
+http.client.RemoteDisconnected: Remote end closed connection without response
+
+The above exception was the direct cause of the following exception:
+
+urllib3.exceptions.ProxyError: ('Unable to connect to proxy', RemoteDisconnected('Remote end closed connection without response'))
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/requests/adapters.py", line 486, in send
+    resp = conn.urlopen(
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/urllib3/connectionpool.py", line 844, in urlopen
+    retries = retries.increment(
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/urllib3/util/retry.py", line 515, in increment
+    raise MaxRetryError(_pool, url, reason) from reason  # type: ignore[arg-type]
+urllib3.exceptions.MaxRetryError: HTTPSConnectionPool(host='api.telegram.org', port=443): Max retries exceeded with url: /bot6863293806:AAH3rusajaRMnCL82Og4HlCvPFDzOBh4dVw/getUpdates?offset=937875527&timeout=20 (Caused by ProxyError('Unable to connect to proxy', RemoteDisconnected('Remote end closed connection without response')))
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/telebot/__init__.py", line 955, in infinity_polling
+    self.polling(non_stop=True, timeout=timeout, long_polling_timeout=long_polling_timeout,
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/telebot/__init__.py", line 1043, in polling
+    self.__threaded_polling(non_stop=non_stop, interval=interval, timeout=timeout, long_polling_timeout=long_polling_timeout,
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/telebot/__init__.py", line 1118, in __threaded_polling
+    raise e
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/telebot/__init__.py", line 1073, in __threaded_polling
+    polling_thread.raise_exceptions()
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/telebot/util.py", line 108, in raise_exceptions
+    raise self.exception_info
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/telebot/util.py", line 90, in run
+    task(*args, **kwargs)
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/telebot/__init__.py", line 649, in __retrieve_updates
+    updates = self.get_updates(offset=(self.last_update_id + 1),
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/telebot/__init__.py", line 623, in get_updates
+    json_updates = apihelper.get_updates(self.token, offset, limit, timeout, allowed_updates, long_polling_timeout)
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/telebot/apihelper.py", line 321, in get_updates
+    return _make_request(token, method_url, params=payload)
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/telebot/apihelper.py", line 156, in _make_request
+    result = _get_req_session().request(
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/requests/sessions.py", line 589, in request
+    resp = self.send(prep, **send_kwargs)
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/requests/sessions.py", line 703, in send
+    r = adapter.send(request, **kwargs)
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/requests/adapters.py", line 513, in send
+    raise ProxyError(e, request=request)
+requests.exceptions.ProxyError: HTTPSConnectionPool(host='api.telegram.org', port=443): Max retries exceeded with url: /bot6863293806:AAH3rusajaRMnCL82Og4HlCvPFDzOBh4dVw/getUpdates?offset=937875527&timeout=20 (Caused by ProxyError('Unable to connect to proxy', RemoteDisconnected('Remote end closed connection without response')))
+
+2024-03-16 11:43:39,011 [ERROR]: Threaded polling exception: A request to the Telegram API was unsuccessful. Error code: 400. Description: Bad Request: message is too long
+2024-03-16 11:43:39,013 [ERROR]: Exception traceback:
+Traceback (most recent call last):
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/telebot/__init__.py", line 1074, in __threaded_polling
+    self.worker_pool.raise_exceptions()
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/telebot/util.py", line 147, in raise_exceptions
+    raise self.exception_info
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/telebot/util.py", line 90, in run
+    task(*args, **kwargs)
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/helpmanbot/telegram_bot/management/commands/main.py", line 139, in process_29_network_handler
+    bot.send_message(message.chat.id, response)
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/telebot/__init__.py", line 1549, in send_message
+    apihelper.send_message(
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/telebot/apihelper.py", line 264, in send_message
+    return _make_request(token, method_url, params=payload, method='post')
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/telebot/apihelper.py", line 162, in _make_request
+    json_result = _check_result(method_name, result)
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/telebot/apihelper.py", line 189, in _check_result
+    raise ApiTelegramException(method_name, result, result_json)
+telebot.apihelper.ApiTelegramException: A request to the Telegram API was unsuccessful. Error code: 400. Description: Bad Request: message is too long
+
+2024-03-16 11:45:05,908 [ERROR]: Infinity polling: polling exited
+2024-03-16 11:45:05,911 [ERROR]: Break infinity polling
+2024-03-16 11:45:13,066 [ERROR]: Infinity polling exception: In order to allow non-dict objects to be serialized set the safe parameter to False.
+2024-03-16 11:45:13,073 [ERROR]: Exception traceback:
+Traceback (most recent call last):
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/helpmanbot/telegram_bot/views.py", line 47, in process_29_network
+    if int(last_part[0]) == part:
+IndexError: list index out of range
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/telebot/__init__.py", line 955, in infinity_polling
+    self.polling(non_stop=True, timeout=timeout, long_polling_timeout=long_polling_timeout,
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/telebot/__init__.py", line 1043, in polling
+    self.__threaded_polling(non_stop=non_stop, interval=interval, timeout=timeout, long_polling_timeout=long_polling_timeout,
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/telebot/__init__.py", line 1118, in __threaded_polling
+    raise e
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/telebot/__init__.py", line 1074, in __threaded_polling
+    self.worker_pool.raise_exceptions()
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/telebot/util.py", line 147, in raise_exceptions
+    raise self.exception_info
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/telebot/util.py", line 90, in run
+    task(*args, **kwargs)
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/helpmanbot/telegram_bot/management/commands/main.py", line 136, in process_29_network_handler
+    response = process_29_network(sap, bot, chat_id)
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/helpmanbot/telegram_bot/views.py", line 164, in process_29_network
+    return JsonResponse({"Что то пошло не так! Данное значение не является SAP или он еще не внесен в базу!"}, status=500)
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/django/http/response.py", line 724, in __init__
+    raise TypeError(
+TypeError: In order to allow non-dict objects to be serialized set the safe parameter to False.
+
+2024-03-16 11:45:43,800 [ERROR]: Infinity polling exception: In order to allow non-dict objects to be serialized set the safe parameter to False.
+2024-03-16 11:45:43,802 [ERROR]: Exception traceback:
+Traceback (most recent call last):
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/helpmanbot/telegram_bot/views.py", line 47, in process_29_network
+    if int(last_part[0]) == part:
+IndexError: list index out of range
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/telebot/__init__.py", line 955, in infinity_polling
+    self.polling(non_stop=True, timeout=timeout, long_polling_timeout=long_polling_timeout,
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/telebot/__init__.py", line 1043, in polling
+    self.__threaded_polling(non_stop=non_stop, interval=interval, timeout=timeout, long_polling_timeout=long_polling_timeout,
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/telebot/__init__.py", line 1118, in __threaded_polling
+    raise e
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/telebot/__init__.py", line 1074, in __threaded_polling
+    self.worker_pool.raise_exceptions()
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/telebot/util.py", line 147, in raise_exceptions
+    raise self.exception_info
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/telebot/util.py", line 90, in run
+    task(*args, **kwargs)
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/helpmanbot/telegram_bot/management/commands/main.py", line 136, in process_29_network_handler
+    response = process_29_network(sap, bot, chat_id)
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/helpmanbot/telegram_bot/views.py", line 164, in process_29_network
+    return JsonResponse({"Что то пошло не так! Данное значение не является SAP или он еще не внесен в базу!"}, status=500)
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/django/http/response.py", line 724, in __init__
+    raise TypeError(
+TypeError: In order to allow non-dict objects to be serialized set the safe parameter to False.
+
+2024-03-16 11:47:34,038 [ERROR]: Infinity polling: polling exited
+2024-03-16 11:47:34,047 [ERROR]: Break infinity polling
+2024-03-16 11:48:11,352 [ERROR]: Infinity polling: polling exited
+2024-03-16 11:48:11,354 [ERROR]: Break infinity polling

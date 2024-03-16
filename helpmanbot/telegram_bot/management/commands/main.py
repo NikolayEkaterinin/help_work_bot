@@ -170,8 +170,8 @@ def handle_folder_or_file(message):
             current_path = chosen_item_path
             send_keyboard(message)
         else:
-            # Если сообщение не соответствует названию каталога, игнорируем его
-            return
+            # Если выбран файл, отправляем его пользователю
+            bot.send_document(message.from_user.id, open(chosen_item_path, 'rb'))
 
     except Exception as e:
         # Записываем ошибку в лог и уведомляем пользователя о неполадке
