@@ -13,6 +13,12 @@ from telegram_bot.views import process_29_network
 from send_mail.email_templates import EmailTemplates
 from send_mail.models import Item
 
+
+#ATOL = os.getenv('Atol_email').strip().split(',') if os.getenv('Atol_email') else []
+
+ATOL = ['n.ekaterinin@souyz76.ru', 'eh37@ya.ru']
+
+
 email_templates = EmailTemplates()
 descriptions = {}
 
@@ -188,15 +194,59 @@ def handle_email_button(call):
     bot.send_message(call.message.chat.id, "Введите модель ФР:")
     bot.register_next_step_handler(call.message, ask_model)
 
+
 def ask_model(message):
     model = message.text
-    bot.send_message(message.chat.id, "Введите номер ЗН ККТ в ремонте:")
-    bot.register_next_step_handler(message, ask_repair_sn, model)
+
+    # Запрашиваем номер ЗН ККТ в ремонте
+    bot.send_message(message.chat.id,
+                     "Введите номер ЗН ККТ в ремонте (длина 14 символов, начиная с '00'):")
+
+    # Регистрируем следующий шаг с валидацией серийного номера
+    bot.register_next_step_handler(message, validate_repair_sn, model)
+
+
+def validate_repair_sn(message, model):
+    repair_sn = message.text
+
+    # Проверяем длину серийного номера и начинается ли он с '00'
+    if len(repair_sn) != 14 or not repair_sn.startswith('00'):
+        bot.send_message(message.chat.id,
+                         "Номер ЗН ККТ должен составлять 14 символов и начинаться с '00'. Пожалуйста, введите корректный номер:")
+        bot.register_next_step_handler(message, validate_repair_sn, model)
+    else:
+        # Если серийный номер прошел валидацию, переходим к запросу номера ЗН ККТ подменной
+        bot.send_message(message.chat.id, "Введите номер ЗН ККТ подменной:")
+        bot.register_next_step_handler(message, ask_substitute_sn, model,
+                                       repair_sn)
+
 
 def ask_repair_sn(message, model):
     repair_sn = message.text
     bot.send_message(message.chat.id, "Введите номер ЗН ККТ подменная:")
-    bot.register_next_step_handler(message, ask_substitute_sn, model, repair_sn)
+
+    # Регистрируем следующий шаг с валидатором для номера ЗН ККТ подменной
+    bot.register_next_step_handler(message, validate_substitute_sn, model,
+                                   repair_sn)
+
+
+def validate_substitute_sn(message, model, repair_sn):
+    substitute_sn = message.text
+
+    # Проверяем длину и начало серийного номера
+    if len(substitute_sn) != 14 or not substitute_sn.startswith('00'):
+        bot.send_message(message.chat.id,
+                         "Номер ЗН ККТ подменной должен составлять 14 символов и начинаться с '00'. Пожалуйста, введите корректный номер:")
+        bot.register_next_step_handler(message, validate_substitute_sn, model,
+                                       repair_sn)
+    elif substitute_sn == repair_sn:
+        bot.send_message(message.chat.id,
+                         "Номер ЗН ККТ подменной не может совпадать с номером ЗН ККТ в ремонте. Пожалуйста, введите другой номер:")
+        bot.register_next_step_handler(message, validate_substitute_sn, model,
+                                       repair_sn)
+    else:
+        # Если номер подменной прошел валидацию, переходим к следующему шагу
+        ask_substitute_sn(message, model, repair_sn, substitute_sn)
 
 def ask_substitute_sn(message, model, repair_sn):
     substitute_sn = message.text
@@ -229,8 +279,9 @@ def ask_substitute_sn(message, model, repair_sn):
         ticket=next_ticket,
         id_user=custom_user,
         description=email_text,  # Используем текст письма с замененными данными
-        email="vendor@example.com",
+        email=ATOL,
         send_message=False,
+        subject='Запрос скрипта для смены заводского номера'
     )
 
     # Сохраняем экземпляр модели в базе данных

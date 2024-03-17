@@ -32857,3 +32857,293 @@ ValueError: Cannot assign "(<CustomUser: CustomUser object (79)>, False)": "Item
 2024-03-17 19:57:38,637 [ERROR]: Infinity polling: polling exited
 2024-03-17 19:57:38,638 [ERROR]: Break infinity polling
 2024-03-17 19:58:09,444 [ERROR]: Произошла ошибка: [Errno 2] No such file or directory: '/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/helpmanbot/Instructions/АТОЛ77'
+2024-03-17 20:01:24,400 [ERROR]: Infinity polling exception: HTTPSConnectionPool(host='api.telegram.org', port=443): Max retries exceeded with url: /bot6863293806:AAH3rusajaRMnCL82Og4HlCvPFDzOBh4dVw/getUpdates?offset=937875677&timeout=20 (Caused by ProxyError('Unable to connect to proxy', RemoteDisconnected('Remote end closed connection without response')))
+2024-03-17 20:01:24,403 [ERROR]: Exception traceback:
+Traceback (most recent call last):
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/urllib3/connectionpool.py", line 790, in urlopen
+    response = self._make_request(
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/urllib3/connectionpool.py", line 536, in _make_request
+    response = conn.getresponse()
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/urllib3/connection.py", line 454, in getresponse
+    httplib_response = super().getresponse()
+  File "/usr/local/Cellar/python@3.9/3.9.18/Frameworks/Python.framework/Versions/3.9/lib/python3.9/http/client.py", line 1377, in getresponse
+    response.begin()
+  File "/usr/local/Cellar/python@3.9/3.9.18/Frameworks/Python.framework/Versions/3.9/lib/python3.9/http/client.py", line 320, in begin
+    version, status, reason = self._read_status()
+  File "/usr/local/Cellar/python@3.9/3.9.18/Frameworks/Python.framework/Versions/3.9/lib/python3.9/http/client.py", line 289, in _read_status
+    raise RemoteDisconnected("Remote end closed connection without"
+http.client.RemoteDisconnected: Remote end closed connection without response
+
+The above exception was the direct cause of the following exception:
+
+urllib3.exceptions.ProxyError: ('Unable to connect to proxy', RemoteDisconnected('Remote end closed connection without response'))
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/requests/adapters.py", line 486, in send
+    resp = conn.urlopen(
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/urllib3/connectionpool.py", line 844, in urlopen
+    retries = retries.increment(
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/urllib3/util/retry.py", line 515, in increment
+    raise MaxRetryError(_pool, url, reason) from reason  # type: ignore[arg-type]
+urllib3.exceptions.MaxRetryError: HTTPSConnectionPool(host='api.telegram.org', port=443): Max retries exceeded with url: /bot6863293806:AAH3rusajaRMnCL82Og4HlCvPFDzOBh4dVw/getUpdates?offset=937875677&timeout=20 (Caused by ProxyError('Unable to connect to proxy', RemoteDisconnected('Remote end closed connection without response')))
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/telebot/__init__.py", line 955, in infinity_polling
+    self.polling(non_stop=True, timeout=timeout, long_polling_timeout=long_polling_timeout,
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/telebot/__init__.py", line 1043, in polling
+    self.__threaded_polling(non_stop=non_stop, interval=interval, timeout=timeout, long_polling_timeout=long_polling_timeout,
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/telebot/__init__.py", line 1118, in __threaded_polling
+    raise e
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/telebot/__init__.py", line 1073, in __threaded_polling
+    polling_thread.raise_exceptions()
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/telebot/util.py", line 108, in raise_exceptions
+    raise self.exception_info
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/telebot/util.py", line 90, in run
+    task(*args, **kwargs)
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/telebot/__init__.py", line 649, in __retrieve_updates
+    updates = self.get_updates(offset=(self.last_update_id + 1),
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/telebot/__init__.py", line 623, in get_updates
+    json_updates = apihelper.get_updates(self.token, offset, limit, timeout, allowed_updates, long_polling_timeout)
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/telebot/apihelper.py", line 321, in get_updates
+    return _make_request(token, method_url, params=payload)
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/telebot/apihelper.py", line 156, in _make_request
+    result = _get_req_session().request(
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/requests/sessions.py", line 589, in request
+    resp = self.send(prep, **send_kwargs)
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/requests/sessions.py", line 703, in send
+    r = adapter.send(request, **kwargs)
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/requests/adapters.py", line 513, in send
+    raise ProxyError(e, request=request)
+requests.exceptions.ProxyError: HTTPSConnectionPool(host='api.telegram.org', port=443): Max retries exceeded with url: /bot6863293806:AAH3rusajaRMnCL82Og4HlCvPFDzOBh4dVw/getUpdates?offset=937875677&timeout=20 (Caused by ProxyError('Unable to connect to proxy', RemoteDisconnected('Remote end closed connection without response')))
+
+2024-03-17 20:04:32,595 [ERROR]: Infinity polling: polling exited
+2024-03-17 20:04:32,598 [ERROR]: Break infinity polling
+2024-03-17 20:09:19,275 [ERROR]: Infinity polling: polling exited
+2024-03-17 20:09:19,277 [ERROR]: Break infinity polling
+2024-03-17 20:09:42,949 [ERROR]: Infinity polling exception: maximum recursion depth exceeded in comparison
+2024-03-17 20:09:42,953 [ERROR]: Exception traceback:
+Traceback (most recent call last):
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/telebot/__init__.py", line 955, in infinity_polling
+    self.polling(non_stop=True, timeout=timeout, long_polling_timeout=long_polling_timeout,
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/telebot/__init__.py", line 1043, in polling
+    self.__threaded_polling(non_stop=non_stop, interval=interval, timeout=timeout, long_polling_timeout=long_polling_timeout,
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/telebot/__init__.py", line 1118, in __threaded_polling
+    raise e
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/telebot/__init__.py", line 1074, in __threaded_polling
+    self.worker_pool.raise_exceptions()
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/telebot/util.py", line 147, in raise_exceptions
+    raise self.exception_info
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/telebot/util.py", line 90, in run
+    task(*args, **kwargs)
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/telebot/__init__.py", line 6770, in _run_middlewares_and_handler
+    result = handler['function'](message)
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/helpmanbot/telegram_bot/management/commands/main.py", line 147, in handle_fr_vendor_selection
+    handle_fr_vendor_selection(call)
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/helpmanbot/telegram_bot/management/commands/main.py", line 147, in handle_fr_vendor_selection
+    handle_fr_vendor_selection(call)
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/helpmanbot/telegram_bot/management/commands/main.py", line 147, in handle_fr_vendor_selection
+    handle_fr_vendor_selection(call)
+  [Previous line repeated 992 more times]
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/helpmanbot/telegram_bot/management/commands/main.py", line 146, in handle_fr_vendor_selection
+    if call.data == "atol":
+RecursionError: maximum recursion depth exceeded in comparison
+
+2024-03-17 20:11:01,034 [ERROR]: Infinity polling: polling exited
+2024-03-17 20:11:01,036 [ERROR]: Break infinity polling
+2024-03-17 20:16:34,420 [ERROR]: Infinity polling: polling exited
+2024-03-17 20:16:34,424 [ERROR]: Break infinity polling
+2024-03-17 20:23:23,528 [ERROR]: Infinity polling: polling exited
+2024-03-17 20:23:23,530 [ERROR]: Break infinity polling
+2024-03-17 20:29:45,822 [ERROR]: Infinity polling: polling exited
+2024-03-17 20:29:45,825 [ERROR]: Break infinity polling
+2024-03-17 20:33:30,285 [ERROR]: Infinity polling: polling exited
+2024-03-17 20:33:30,294 [ERROR]: Break infinity polling
+2024-03-17 20:34:12,259 [ERROR]: Infinity polling exception: NOT NULL constraint failed: send_mail_item.email
+2024-03-17 20:34:12,266 [ERROR]: Exception traceback:
+Traceback (most recent call last):
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/django/db/backends/utils.py", line 89, in _execute
+    return self.cursor.execute(sql, params)
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/django/db/backends/sqlite3/base.py", line 328, in execute
+    return super().execute(query, params)
+sqlite3.IntegrityError: NOT NULL constraint failed: send_mail_item.email
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/telebot/__init__.py", line 955, in infinity_polling
+    self.polling(non_stop=True, timeout=timeout, long_polling_timeout=long_polling_timeout,
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/telebot/__init__.py", line 1043, in polling
+    self.__threaded_polling(non_stop=non_stop, interval=interval, timeout=timeout, long_polling_timeout=long_polling_timeout,
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/telebot/__init__.py", line 1118, in __threaded_polling
+    raise e
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/telebot/__init__.py", line 1074, in __threaded_polling
+    self.worker_pool.raise_exceptions()
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/telebot/util.py", line 147, in raise_exceptions
+    raise self.exception_info
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/telebot/util.py", line 90, in run
+    task(*args, **kwargs)
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/helpmanbot/telegram_bot/management/commands/main.py", line 285, in ask_substitute_sn
+    item.save()
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/django/db/models/base.py", line 814, in save
+    self.save_base(
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/django/db/models/base.py", line 877, in save_base
+    updated = self._save_table(
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/django/db/models/base.py", line 1020, in _save_table
+    results = self._do_insert(
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/django/db/models/base.py", line 1061, in _do_insert
+    return manager._insert(
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/django/db/models/manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/django/db/models/query.py", line 1805, in _insert
+    return query.get_compiler(using=using).execute_sql(returning_fields)
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/django/db/models/sql/compiler.py", line 1822, in execute_sql
+    cursor.execute(sql, params)
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/django/db/backends/utils.py", line 102, in execute
+    return super().execute(sql, params)
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/django/db/backends/utils.py", line 67, in execute
+    return self._execute_with_wrappers(
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/django/db/backends/utils.py", line 80, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/django/db/backends/utils.py", line 89, in _execute
+    return self.cursor.execute(sql, params)
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/django/db/utils.py", line 91, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/django/db/backends/utils.py", line 89, in _execute
+    return self.cursor.execute(sql, params)
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/django/db/backends/sqlite3/base.py", line 328, in execute
+    return super().execute(query, params)
+django.db.utils.IntegrityError: NOT NULL constraint failed: send_mail_item.email
+
+2024-03-17 20:35:40,989 [ERROR]: Infinity polling: polling exited
+2024-03-17 20:35:40,990 [ERROR]: Break infinity polling
+2024-03-17 20:36:15,593 [ERROR]: Infinity polling exception: NOT NULL constraint failed: send_mail_item.email
+2024-03-17 20:36:15,599 [ERROR]: Exception traceback:
+Traceback (most recent call last):
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/django/db/backends/utils.py", line 89, in _execute
+    return self.cursor.execute(sql, params)
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/django/db/backends/sqlite3/base.py", line 328, in execute
+    return super().execute(query, params)
+sqlite3.IntegrityError: NOT NULL constraint failed: send_mail_item.email
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/telebot/__init__.py", line 955, in infinity_polling
+    self.polling(non_stop=True, timeout=timeout, long_polling_timeout=long_polling_timeout,
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/telebot/__init__.py", line 1043, in polling
+    self.__threaded_polling(non_stop=non_stop, interval=interval, timeout=timeout, long_polling_timeout=long_polling_timeout,
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/telebot/__init__.py", line 1118, in __threaded_polling
+    raise e
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/telebot/__init__.py", line 1074, in __threaded_polling
+    self.worker_pool.raise_exceptions()
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/telebot/util.py", line 147, in raise_exceptions
+    raise self.exception_info
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/telebot/util.py", line 90, in run
+    task(*args, **kwargs)
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/helpmanbot/telegram_bot/management/commands/main.py", line 285, in ask_substitute_sn
+    item.save()
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/django/db/models/base.py", line 814, in save
+    self.save_base(
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/django/db/models/base.py", line 877, in save_base
+    updated = self._save_table(
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/django/db/models/base.py", line 1020, in _save_table
+    results = self._do_insert(
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/django/db/models/base.py", line 1061, in _do_insert
+    return manager._insert(
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/django/db/models/manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/django/db/models/query.py", line 1805, in _insert
+    return query.get_compiler(using=using).execute_sql(returning_fields)
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/django/db/models/sql/compiler.py", line 1822, in execute_sql
+    cursor.execute(sql, params)
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/django/db/backends/utils.py", line 102, in execute
+    return super().execute(sql, params)
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/django/db/backends/utils.py", line 67, in execute
+    return self._execute_with_wrappers(
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/django/db/backends/utils.py", line 80, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/django/db/backends/utils.py", line 89, in _execute
+    return self.cursor.execute(sql, params)
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/django/db/utils.py", line 91, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/django/db/backends/utils.py", line 89, in _execute
+    return self.cursor.execute(sql, params)
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/django/db/backends/sqlite3/base.py", line 328, in execute
+    return super().execute(query, params)
+django.db.utils.IntegrityError: NOT NULL constraint failed: send_mail_item.email
+
+2024-03-17 20:40:21,584 [ERROR]: Infinity polling: polling exited
+2024-03-17 20:40:21,593 [ERROR]: Break infinity polling
+2024-03-17 20:42:30,854 [ERROR]: Infinity polling: polling exited
+2024-03-17 20:42:30,864 [ERROR]: Break infinity polling
+2024-03-17 20:44:32,899 [ERROR]: Infinity polling: polling exited
+2024-03-17 20:44:32,900 [ERROR]: Break infinity polling
+2024-03-17 21:00:34,031 [ERROR]: Infinity polling exception: HTTPSConnectionPool(host='api.telegram.org', port=443): Max retries exceeded with url: /bot6863293806:AAH3rusajaRMnCL82Og4HlCvPFDzOBh4dVw/getUpdates?offset=937875750&timeout=20 (Caused by ProxyError('Unable to connect to proxy', RemoteDisconnected('Remote end closed connection without response')))
+2024-03-17 21:00:34,040 [ERROR]: Exception traceback:
+Traceback (most recent call last):
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/urllib3/connectionpool.py", line 790, in urlopen
+    response = self._make_request(
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/urllib3/connectionpool.py", line 536, in _make_request
+    response = conn.getresponse()
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/urllib3/connection.py", line 454, in getresponse
+    httplib_response = super().getresponse()
+  File "/usr/local/Cellar/python@3.9/3.9.18/Frameworks/Python.framework/Versions/3.9/lib/python3.9/http/client.py", line 1377, in getresponse
+    response.begin()
+  File "/usr/local/Cellar/python@3.9/3.9.18/Frameworks/Python.framework/Versions/3.9/lib/python3.9/http/client.py", line 320, in begin
+    version, status, reason = self._read_status()
+  File "/usr/local/Cellar/python@3.9/3.9.18/Frameworks/Python.framework/Versions/3.9/lib/python3.9/http/client.py", line 289, in _read_status
+    raise RemoteDisconnected("Remote end closed connection without"
+http.client.RemoteDisconnected: Remote end closed connection without response
+
+The above exception was the direct cause of the following exception:
+
+urllib3.exceptions.ProxyError: ('Unable to connect to proxy', RemoteDisconnected('Remote end closed connection without response'))
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/requests/adapters.py", line 486, in send
+    resp = conn.urlopen(
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/urllib3/connectionpool.py", line 844, in urlopen
+    retries = retries.increment(
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/urllib3/util/retry.py", line 515, in increment
+    raise MaxRetryError(_pool, url, reason) from reason  # type: ignore[arg-type]
+urllib3.exceptions.MaxRetryError: HTTPSConnectionPool(host='api.telegram.org', port=443): Max retries exceeded with url: /bot6863293806:AAH3rusajaRMnCL82Og4HlCvPFDzOBh4dVw/getUpdates?offset=937875750&timeout=20 (Caused by ProxyError('Unable to connect to proxy', RemoteDisconnected('Remote end closed connection without response')))
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/telebot/__init__.py", line 955, in infinity_polling
+    self.polling(non_stop=True, timeout=timeout, long_polling_timeout=long_polling_timeout,
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/telebot/__init__.py", line 1043, in polling
+    self.__threaded_polling(non_stop=non_stop, interval=interval, timeout=timeout, long_polling_timeout=long_polling_timeout,
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/telebot/__init__.py", line 1118, in __threaded_polling
+    raise e
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/telebot/__init__.py", line 1073, in __threaded_polling
+    polling_thread.raise_exceptions()
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/telebot/util.py", line 108, in raise_exceptions
+    raise self.exception_info
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/telebot/util.py", line 90, in run
+    task(*args, **kwargs)
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/telebot/__init__.py", line 649, in __retrieve_updates
+    updates = self.get_updates(offset=(self.last_update_id + 1),
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/telebot/__init__.py", line 623, in get_updates
+    json_updates = apihelper.get_updates(self.token, offset, limit, timeout, allowed_updates, long_polling_timeout)
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/telebot/apihelper.py", line 321, in get_updates
+    return _make_request(token, method_url, params=payload)
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/telebot/apihelper.py", line 156, in _make_request
+    result = _get_req_session().request(
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/requests/sessions.py", line 589, in request
+    resp = self.send(prep, **send_kwargs)
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/requests/sessions.py", line 703, in send
+    r = adapter.send(request, **kwargs)
+  File "/Users/Nick_DEV/Documents/DEV/My_project/telebot_helpman/help_work_bot/.venv/lib/python3.9/site-packages/requests/adapters.py", line 513, in send
+    raise ProxyError(e, request=request)
+requests.exceptions.ProxyError: HTTPSConnectionPool(host='api.telegram.org', port=443): Max retries exceeded with url: /bot6863293806:AAH3rusajaRMnCL82Og4HlCvPFDzOBh4dVw/getUpdates?offset=937875750&timeout=20 (Caused by ProxyError('Unable to connect to proxy', RemoteDisconnected('Remote end closed connection without response')))
+
+2024-03-17 21:09:49,782 [ERROR]: Infinity polling: polling exited
+2024-03-17 21:09:49,785 [ERROR]: Break infinity polling

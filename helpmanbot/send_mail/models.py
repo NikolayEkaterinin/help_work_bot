@@ -27,6 +27,10 @@ class Item(models.Model):
         verbose_name='email вендера',
         blank=False,
     )
+    subject = models.TextField(
+        verbose_name='Тема письма',
+        blank=False,
+    )
     image = models.ImageField(
         verbose_name='Прикладываемое фото',
         upload_to="email_photo/",
