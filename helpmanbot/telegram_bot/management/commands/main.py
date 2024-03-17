@@ -11,7 +11,7 @@ from telegram_bot.models import CustomUser, Image
 from telegram_bot.views import process_29_network
 
 from send_mail.email_templates import EmailTemplates
-
+from send_mail.models import Item
 
 email_templates = EmailTemplates()
 descriptions = {}
@@ -88,7 +88,8 @@ def handle_start(message):
 
     except Exception as e:
         logging.error(f"Произошла ошибка: {e}")
-        bot.send_message(message.from_user.id, "Произошла ошибка при выполнении операции. Пожалуйста, попробуйте еще раз.")
+        bot.send_message(message.from_user.id,
+                         "Произошла ошибка при выполнении операции. Пожалуйста, попробуйте еще раз.")
 
 
 def send_keyboard(message):
@@ -147,12 +148,10 @@ def handle_fr_vendor_selection(call):
     elif call.data == "shtrih":
         handle_fr_vendor_selection(call)
         recipient_email = "n.ekaterinin@souyz76.ru"
-        # Продолжайте обработку для производителя "ШТРИХ" здесь
 
 # Обработчик выбора производителя ФР "АТОЛ"
 @bot.callback_query_handler(func=lambda call: call.data in ["atol", "shtrih"])
 def handle_fr_vendor_selection(call):
-    recipient_email = ""
     if call.data == "atol":
         keyboard = telebot.types.InlineKeyboardMarkup()
         keyboard.row(
@@ -181,52 +180,81 @@ def handle_fr_vendor_selection(call):
         )
         bot.send_message(call.message.chat.id, "Выберите тему для обращения:", reply_markup=keyboard)
 
+
 @bot.callback_query_handler(func=lambda call: call.data == "atol_serial_script")
+
 def handle_email_button(call):
     # Запрашиваем модель и номера ЗН ККТ у пользователя
     bot.send_message(call.message.chat.id, "Введите модель ФР:")
     bot.register_next_step_handler(call.message, ask_model)
-
 
 def ask_model(message):
     model = message.text
     bot.send_message(message.chat.id, "Введите номер ЗН ККТ в ремонте:")
     bot.register_next_step_handler(message, ask_repair_sn, model)
 
-
 def ask_repair_sn(message, model):
     repair_sn = message.text
     bot.send_message(message.chat.id, "Введите номер ЗН ККТ подменная:")
     bot.register_next_step_handler(message, ask_substitute_sn, model, repair_sn)
-
 
 def ask_substitute_sn(message, model, repair_sn):
     substitute_sn = message.text
 
     # Получаем текст письма
     template_key = "atol_serial_script"
-    email_text = email_templates.get_template(template_key)
+    email_text_template = email_templates.get_template(template_key)
 
     # Заменяем заполнители в тексте письма на введенные пользователем данные
-    email_text = email_text.replace("model", model)
+    email_text = email_text_template.replace("model", model)
     email_text = email_text.replace("repair_sn", repair_sn)
     email_text = email_text.replace("substitute_sn", substitute_sn)
+    print(email_text)
+    # Определяем следующий доступный номер ticket
+    last_item = Item.objects.last()
+    if last_item:
+        next_ticket = last_item.ticket + 1
+    else:
+        next_ticket = 1
 
-    # Сохраняем полученный текст письма в переменной
-    descriptions["atol_serial_script"] = email_text
+    # Получаем пользователя Telegram
+    telegram_user_id = message.from_user.id
 
-    # Отправляем письмо с заполненными данными
-    bot.send_message(message.chat.id, email_text)
+    # Ищем соответствующего пользователя в базе данных
+    custom_user, created = CustomUser.objects.get_or_create(
+        telegram_id=telegram_user_id)
 
+    # Создаем экземпляр модели Item и заполняем его данными из пользовательского ввода
+    item = Item(
+        ticket=next_ticket,
+        id_user=custom_user,
+        description=email_text,  # Используем текст письма с замененными данными
+        email="vendor@example.com",
+        send_message=False,
+    )
 
+    # Сохраняем экземпляр модели в базе данных
+    item.save()
 
+    # Запрашиваем фото тестового прогона
+    bot.send_message(message.chat.id, "Пришлите фото тестового прогона:")
+    bot.register_next_step_handler(message, ask_test_run_photo)
 
-@bot.message_handler(func=lambda message: message.text == '29 сеть')
-def handle_29_network(message):
-    # Запрашиваем у пользователя SAP магазина
-    msg = bot.send_message(message.chat.id, "Введите SAP магазина:")
-    bot.register_next_step_handler(msg, process_29_network_handler)
+def ask_test_run_photo(message):
+    # Проверяем, что сообщение содержит фото
+    if message.photo:
+        bot.send_message(message.chat.id, "Спасибо! Фото получено.")
 
+        # Обновляем экземпляр модели Item, добавляя фото тестового прогона
+        item = Item.objects.last()
+        if item:
+            item.image = message.photo[-1].file_id
+            item.save()
+        else:
+            bot.send_message(message.chat.id, "Ошибка сохранения данных.")
+    else:
+        bot.send_message(message.chat.id,
+                         "Пожалуйста, пришлите фото тестового прогона.")
 
 def process_29_network_handler(message):
 

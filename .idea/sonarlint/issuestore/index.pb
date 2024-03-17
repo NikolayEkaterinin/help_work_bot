@@ -7,12 +7,8 @@ B
 helpmanbot/bot.log,1/8/184fc86fad9ea4578a045cfe67b62b034c12dc99
 C
 helpmanbot/start.py,7/8/78b1fc686e6aa72871bfa5bce5aecf1e35e07547
-R
-"helpmanbot/Instructions/1/test.txt,0/e/0e51a9fbca2b1cbad73c80527709585808e58e0b
 O
 helpmanbot/Instructions/1/1.txt,6/d/6ddd2b37312f4bdcc3b30eb951b2b22682bb698e
-T
-$helpmanbot/telegram_bot/subnet_29.py,5/d/5d56ff033b7e90cc330f4cd5f78f0c645fe12edb
 P
  helpmanbot/telegram_bot/views.py,b/f/bf69a435b806e99ac9f590f06ab2ca8037d05e25
 Q
