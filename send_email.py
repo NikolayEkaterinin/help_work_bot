@@ -1,8 +1,15 @@
+import os
 import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
-
+from dotenv import load_dotenv
 from aiogram.types import Message
+
+load_dotenv()
+
+SENDER_EMAIL = os.getenv('sender_email')
+SENDER_PASSWORD = os.getenv('sender_password')
+
 
 async def send_email(sender_email, sender_password, recipient_email, subject, body):
     # Создаем объект MIMEMultipart
@@ -25,8 +32,8 @@ async def send_email(sender_email, sender_password, recipient_email, subject, bo
         print("Ошибка при отправке письма: " + str(e))
 
 # Пример использования
-sender_email = "n.ekaterinin@soyuz76.ru"
-sender_password = "hQh3bsNzmNZGrJfxiG3P"
+sender_email = SENDER_EMAIL
+sender_password = SENDER_PASSWORD
 recipient_email = "n.ekaterinin@soyuz76.ru"
 subject = "Тестовое письмо"
 body = "Тестовое письмо"

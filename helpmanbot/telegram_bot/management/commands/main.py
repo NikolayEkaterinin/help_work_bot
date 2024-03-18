@@ -13,10 +13,12 @@ from telegram_bot.views import process_29_network
 from send_mail.email_templates import EmailTemplates
 from send_mail.models import Item
 
+# Загрузка переменных окружения
+load_dotenv()
 
-#ATOL = os.getenv('Atol_email').strip().split(',') if os.getenv('Atol_email') else []
+ATOL = os.getenv('Atol_email').strip().split(',') if os.getenv('Atol_email') else []
 
-ATOL = ['n.ekaterinin@souyz76.ru', 'eh37@ya.ru']
+#ATOL = ['n.ekaterinin@souyz76.ru', 'eh37@ya.ru']
 
 
 email_templates = EmailTemplates()
