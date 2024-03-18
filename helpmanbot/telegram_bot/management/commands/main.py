@@ -268,46 +268,44 @@ def ask_substitute_sn(message, model, repair_sn):
         next_ticket = last_item.ticket + 1
     else:
         next_ticket = 1
-
     # Получаем пользователя Telegram
     telegram_user_id = message.from_user.id
 
     # Ищем соответствующего пользователя в базе данных
-    custom_user, created = CustomUser.objects.get_or_create(
-        telegram_id=telegram_user_id)
+    custom_user, created = CustomUser.objects.get_or_create(telegram_id=telegram_user_id)
 
-    # Создаем экземпляр модели Item и заполняем его данными из пользовательского ввода
-    item = Item(
-        ticket=next_ticket,
-        id_user=custom_user,
-        description=email_text,  # Используем текст письма с замененными данными
-        email=ATOL,
-        send_message=False,
-        subject='Запрос скрипта для смены заводского номера'
-    )
-
-    # Сохраняем экземпляр модели в базе данных
-    item.save()
+    # Сохраняем данные в переменные сообщения
+    message.ticket = next_ticket
+    message.custom_user = custom_user
+    message.email_text = email_text
 
     # Запрашиваем фото тестового прогона
     bot.send_message(message.chat.id, "Пришлите фото тестового прогона:")
-    bot.register_next_step_handler(message, ask_test_run_photo)
+    # Передаем атрибуты ticket, custom_user и email_text в функцию ask_test_run_photo
+    bot.register_next_step_handler(message, ask_test_run_photo, next_ticket, custom_user, email_text)
 
-def ask_test_run_photo(message):
+
+def ask_test_run_photo(message, ticket, custom_user, email_text):
     # Проверяем, что сообщение содержит фото
     if message.photo:
         bot.send_message(message.chat.id, "Спасибо! Фото получено.")
 
-        # Обновляем экземпляр модели Item, добавляя фото тестового прогона
-        item = Item.objects.last()
-        if item:
-            item.image = message.photo[-1].file_id
-            item.save()
-        else:
-            bot.send_message(message.chat.id, "Ошибка сохранения данных.")
+        # Создаем экземпляр модели Item и заполняем его данными из переменных сообщения
+        item = Item(
+            ticket=ticket,
+            id_user=custom_user,
+            description=email_text,  # используем переданный атрибут email_text
+            email=ATOL,
+            send_message=False,
+            subject='Запрос скрипта для смены заводского номера',
+            image=message.photo[-1].file_id
+        )
+
+        # Сохраняем экземпляр модели в базе данных
+        item.save()
     else:
-        bot.send_message(message.chat.id,
-                         "Пожалуйста, пришлите фото тестового прогона.")
+        bot.send_message(message.chat.id, "Пожалуйста, пришлите фото тестового прогона.")
+
 
 def process_29_network_handler(message):
 
