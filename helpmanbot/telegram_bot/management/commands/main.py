@@ -8,8 +8,8 @@ from django.conf import settings
 from logging.handlers import RotatingFileHandler
 from dotenv import load_dotenv
 import telebot
+from telebot import types
 from telegram_bot.models import CustomUser, Image
-from django.core.files.base import ContentFile
 from django.core.files.uploadedfile import InMemoryUploadedFile
 import tempfile
 from telegram_bot.views import process_29_network
@@ -194,8 +194,15 @@ def handle_fr_vendor_selection(call):
         bot.send_message(call.message.chat.id, "Выберите тему для обращения:", reply_markup=keyboard)
 
 
-@bot.callback_query_handler(func=lambda call: call.data == "atol_serial_script")
+# Функция для отмены операции и возвращения к команде /start
+def cancel_operation(message):
+    bot.send_message(message.chat.id, "Операция отменена. Выберите другую команду или используйте /start.", reply_markup=types.ReplyKeyboardRemove())
 
+# Функция для отмены операции и возвращения к команде /start
+def cancel_operation(message):
+    bot.send_message(message.chat.id, "Операция отменена. Выберите другую команду или используйте /start.", reply_markup=types.ReplyKeyboardRemove())
+
+@bot.callback_query_handler(func=lambda call: call.data == "atol_serial_script")
 def handle_email_button(call):
     # Запрашиваем модель и номера ЗН ККТ у пользователя
     bot.send_message(call.message.chat.id, "Введите модель ФР:")
@@ -203,59 +210,39 @@ def handle_email_button(call):
 
 
 def ask_model(message):
+    if message.text.lower() == "отмена":
+        cancel_operation(message)
+        return
+
     model = message.text
 
     # Запрашиваем номер ЗН ККТ в ремонте
-    bot.send_message(message.chat.id,
-                     "Введите номер ЗН ККТ в ремонте (длина 14 символов, начиная с '00'):")
-
-    # Регистрируем следующий шаг с валидацией серийного номера
+    bot.send_message(message.chat.id, "Введите номер ЗН ККТ в ремонте (длина 14 символов, начиная с '00'):")
     bot.register_next_step_handler(message, validate_repair_sn, model)
 
 
 def validate_repair_sn(message, model):
+    if message.text.lower() == "отмена":
+        cancel_operation(message)
+        return
+
     repair_sn = message.text
 
     # Проверяем длину серийного номера и начинается ли он с '00'
     if len(repair_sn) != 14 or not repair_sn.startswith('00'):
-        bot.send_message(message.chat.id,
-                         "Номер ЗН ККТ должен составлять 14 символов и начинаться с '00'. Пожалуйста, введите корректный номер:")
+        bot.send_message(message.chat.id, "Номер ЗН ККТ должен составлять 14 символов и начинаться с '00'. Пожалуйста, введите корректный номер:")
         bot.register_next_step_handler(message, validate_repair_sn, model)
     else:
         # Если серийный номер прошел валидацию, переходим к запросу номера ЗН ККТ подменной
         bot.send_message(message.chat.id, "Введите номер ЗН ККТ подменной:")
-        bot.register_next_step_handler(message, ask_substitute_sn, model,
-                                       repair_sn)
+        bot.register_next_step_handler(message, ask_substitute_sn, model, repair_sn)
 
-
-def ask_repair_sn(message, model):
-    repair_sn = message.text
-    bot.send_message(message.chat.id, "Введите номер ЗН ККТ подменная:")
-
-    # Регистрируем следующий шаг с валидатором для номера ЗН ККТ подменной
-    bot.register_next_step_handler(message, validate_substitute_sn, model,
-                                   repair_sn)
-
-
-def validate_substitute_sn(message, model, repair_sn):
-    substitute_sn = message.text
-
-    # Проверяем длину и начало серийного номера
-    if len(substitute_sn) != 14 or not substitute_sn.startswith('00'):
-        bot.send_message(message.chat.id,
-                         "Номер ЗН ККТ подменной должен составлять 14 символов и начинаться с '00'. Пожалуйста, введите корректный номер:")
-        bot.register_next_step_handler(message, validate_substitute_sn, model,
-                                       repair_sn)
-    elif substitute_sn == repair_sn:
-        bot.send_message(message.chat.id,
-                         "Номер ЗН ККТ подменной не может совпадать с номером ЗН ККТ в ремонте. Пожалуйста, введите другой номер:")
-        bot.register_next_step_handler(message, validate_substitute_sn, model,
-                                       repair_sn)
-    else:
-        # Если номер подменной прошел валидацию, переходим к следующему шагу
-        ask_substitute_sn(message, model, repair_sn, substitute_sn)
 
 def ask_substitute_sn(message, model, repair_sn):
+    if message.text.lower() == "отмена":
+        cancel_operation(message)
+        return
+
     substitute_sn = message.text
 
     # Получаем текст письма
@@ -291,6 +278,10 @@ def ask_substitute_sn(message, model, repair_sn):
 
 
 def ask_test_run_photo(message, ticket, custom_user, email_text):
+    if message.text.lower() == "отмена":
+        cancel_operation(message)
+        return
+
     # Проверяем, что сообщение содержит фото
     if message.photo:
         bot.send_message(message.chat.id, "Спасибо! Фото получено.")
@@ -334,7 +325,6 @@ def ask_test_run_photo(message, ticket, custom_user, email_text):
 
     else:
         bot.send_message(message.chat.id, "Пожалуйста, пришлите фото тестового прогона.")
-
 
 
 def process_29_network_handler(message):

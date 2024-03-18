@@ -11,15 +11,15 @@ SENDER_EMAIL = os.getenv('sender_email')
 SENDER_PASSWORD = os.getenv('sender_password')
 
 
-async def send_email(sender_email, sender_password, recipient_email, subject, body):
+async def send_email(recipient_emails, subject, description, ticket):
     # Создаем объект MIMEMultipart
     message = MIMEMultipart()
     message["From"] = sender_email
-    message["To"] = recipient_email
-    message["Subject"] = subject
+    message["To"] = ', '.join(recipient_emails)  # Объединяем адреса в строку, разделяя запятой
+    message["Subject"] = f"{subject} (Ticket: {ticket})"  # Добавляем информацию о теме и номере ticket
 
     # Добавляем тело письма
-    message.attach(MIMEText(body, "plain"))
+    message.attach(MIMEText(description, "plain"))
 
     try:
         # Устанавливаем соединение с SMTP-сервером и отправляем письмо
@@ -31,11 +31,11 @@ async def send_email(sender_email, sender_password, recipient_email, subject, bo
     except Exception as e:
         print("Ошибка при отправке письма: " + str(e))
 
+
 # Пример использования
 sender_email = SENDER_EMAIL
 sender_password = SENDER_PASSWORD
 recipient_email = "n.ekaterinin@soyuz76.ru"
-subject = "Тестовое письмо"
-body = "Тестовое письмо"
 
-send_email(sender_email, sender_password, recipient_email, subject, body)
+
+send_email(sender_email, sender_password, recipient_email)
