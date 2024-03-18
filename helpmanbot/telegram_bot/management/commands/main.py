@@ -1,22 +1,27 @@
 import os
 import django
 import logging
+
+import requests
 from django.core.management.base import BaseCommand
 from django.conf import settings
 from logging.handlers import RotatingFileHandler
 from dotenv import load_dotenv
 import telebot
 from telegram_bot.models import CustomUser, Image
-
+from django.core.files.base import ContentFile
+from django.core.files.uploadedfile import InMemoryUploadedFile
+import tempfile
 from telegram_bot.views import process_29_network
 
 from send_mail.email_templates import EmailTemplates
 from send_mail.models import Item
+from send_mail.views import send_email
 
 # Загрузка переменных окружения
 load_dotenv()
 
-ATOL = os.getenv('Atol_email').strip().split(',') if os.getenv('Atol_email') else []
+ATOL = os.getenv('Atol_email')
 
 #ATOL = ['n.ekaterinin@souyz76.ru', 'eh37@ya.ru']
 
@@ -294,17 +299,42 @@ def ask_test_run_photo(message, ticket, custom_user, email_text):
         item = Item(
             ticket=ticket,
             id_user=custom_user,
-            description=email_text,  # используем переданный атрибут email_text
+            description=email_text,
             email=ATOL,
             send_message=False,
-            subject='Запрос скрипта для смены заводского номера',
-            image=message.photo[-1].file_id
+            subject='Запрос скрипта для смены заводского номера'
         )
+
+        # Получаем файл из сообщения Telegram
+        photo = message.photo[-1]
+        file_id = photo.file_id
+        file_info = bot.get_file(file_id)
+        file_url = f"https://api.telegram.org/file/bot{TELEGRAM_TOKEN}/{file_info.file_path}"
+
+        # Сохраняем файл в модели Item
+        img_temp = tempfile.NamedTemporaryFile(delete=True)
+        img_temp.write(requests.get(file_url).content)
+        img_temp.flush()
+        item.image.save(f"{file_id}.jpg", InMemoryUploadedFile(
+            img_temp, None, f"{file_id}.jpg", "image/jpeg", img_temp.tell(), None
+        ), save=True)
 
         # Сохраняем экземпляр модели в базе данных
         item.save()
+
+        recipient_emails = [item.email]
+        subject = item.subject
+        description = item.description
+        ticket = item.ticket
+        attachment = item.image.open()  # Получаем объект ImageFieldFile и открываем его
+
+        # Отправляем письмо
+        send_email(recipient_emails, subject, description, ticket, attachment)
+
+
     else:
         bot.send_message(message.chat.id, "Пожалуйста, пришлите фото тестового прогона.")
+
 
 
 def process_29_network_handler(message):
