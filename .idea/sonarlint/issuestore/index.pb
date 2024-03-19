@@ -85,3 +85,5 @@ Q.idea/sonarlint/securityhotspotstore/8/8/8831074ae17c5f45deb901be97aa6e115183a2
 helpmanbot/.env,4/6/463d8351e725cf9b38e88824867f9960e2fcb93f
 d
 4helpmanbot/send_mail/migrations/0003_item_subject.py,a/f/afdb514810cb197f0de0bc3cef2ab229d902b688
+O
+helpmanbot/start_check_email.py,5/0/5085c616116ff31cf79f4117930321e14fb4c3d0

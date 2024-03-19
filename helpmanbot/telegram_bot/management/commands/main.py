@@ -16,19 +16,15 @@ from telegram_bot.views import process_29_network
 
 from send_mail.email_templates import EmailTemplates
 from send_mail.models import Item
-from send_mail.views import send_email
-
+from send_mail.views import send_email, check_emails
+import time
 # Загрузка переменных окружения
 load_dotenv()
 
 ATOL = os.getenv('Atol_email')
-
-#ATOL = ['n.ekaterinin@souyz76.ru', 'eh37@ya.ru']
-
-
+CHECK_INTERVAL = 60
 email_templates = EmailTemplates()
 descriptions = {}
-
 
 # Загрузка переменных окружения
 load_dotenv()
@@ -38,14 +34,12 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'your_project_name.settings')
 django.setup()
 
 
-# Импорт моделей CustomUser и Image
-
-
 class Command(BaseCommand):
     help = "Телеграм-бот"
 
     def handle(self, *args, **options):
         bot.infinity_polling()
+
 
 
 # Инициализация бота
@@ -162,6 +156,7 @@ def handle_fr_vendor_selection(call):
         handle_fr_vendor_selection(call)
         recipient_email = "n.ekaterinin@souyz76.ru"
 
+
 # Обработчик выбора производителя ФР "АТОЛ"
 @bot.callback_query_handler(func=lambda call: call.data in ["atol", "shtrih"])
 def handle_fr_vendor_selection(call):
@@ -198,13 +193,16 @@ def handle_fr_vendor_selection(call):
 def cancel_operation(message):
     bot.send_message(message.chat.id, "Операция отменена. Выберите другую команду или используйте /start.", reply_markup=types.ReplyKeyboardRemove())
 
+
 # Функция для отмены операции и возвращения к команде /start
 def cancel_operation(message):
     bot.send_message(message.chat.id, "Операция отменена. Выберите другую команду или используйте /start.", reply_markup=types.ReplyKeyboardRemove())
 
+
 @bot.callback_query_handler(func=lambda call: call.data == "atol_serial_script")
 def handle_email_button(call):
     # Запрашиваем модель и номера ЗН ККТ у пользователя
+    bot.send_message(call.message.chat.id, "Добрый день! Вы запустили функцию запроса скрипта для смены серийного номера ФР АТОЛ. Для отмены операции просто введите отмена. Отмену можно произвести на всех шагах кроме предоставления тестового прогона, по этому подготовьте все зарание.")
     bot.send_message(call.message.chat.id, "Введите модель ФР:")
     bot.register_next_step_handler(call.message, ask_model)
 
@@ -278,53 +276,43 @@ def ask_substitute_sn(message, model, repair_sn):
 
 
 def ask_test_run_photo(message, ticket, custom_user, email_text):
-    if message.text.lower() == "отмена":
-        cancel_operation(message)
-        return
+    bot.send_message(message.chat.id, "Спасибо! Фото получено.")
 
-    # Проверяем, что сообщение содержит фото
-    if message.photo:
-        bot.send_message(message.chat.id, "Спасибо! Фото получено.")
+    # Создаем экземпляр модели Item и заполняем его данными из переменных сообщения
+    item = Item(
+        ticket=ticket,
+        id_user=custom_user,
+        description=email_text,
+        email=ATOL,
+        send_message=False,
+        subject='Запрос скрипта для смены заводского номера'
+    )
 
-        # Создаем экземпляр модели Item и заполняем его данными из переменных сообщения
-        item = Item(
-            ticket=ticket,
-            id_user=custom_user,
-            description=email_text,
-            email=ATOL,
-            send_message=False,
-            subject='Запрос скрипта для смены заводского номера'
-        )
+    # Получаем файл из сообщения Telegram
+    photo = message.photo[-1]
+    file_id = photo.file_id
+    file_info = bot.get_file(file_id)
+    file_url = f"https://api.telegram.org/file/bot{TELEGRAM_TOKEN}/{file_info.file_path}"
 
-        # Получаем файл из сообщения Telegram
-        photo = message.photo[-1]
-        file_id = photo.file_id
-        file_info = bot.get_file(file_id)
-        file_url = f"https://api.telegram.org/file/bot{TELEGRAM_TOKEN}/{file_info.file_path}"
+    # Сохраняем файл в модели Item
+    img_temp = tempfile.NamedTemporaryFile(delete=True)
+    img_temp.write(requests.get(file_url).content)
+    img_temp.flush()
+    item.image.save(f"{file_id}.jpg", InMemoryUploadedFile(
+        img_temp, None, f"{file_id}.jpg", "image/jpeg", img_temp.tell(), None
+    ), save=True)
 
-        # Сохраняем файл в модели Item
-        img_temp = tempfile.NamedTemporaryFile(delete=True)
-        img_temp.write(requests.get(file_url).content)
-        img_temp.flush()
-        item.image.save(f"{file_id}.jpg", InMemoryUploadedFile(
-            img_temp, None, f"{file_id}.jpg", "image/jpeg", img_temp.tell(), None
-        ), save=True)
+    # Сохраняем экземпляр модели в базе данных
+    item.save()
 
-        # Сохраняем экземпляр модели в базе данных
-        item.save()
+    recipient_emails = [item.email]
+    subject = item.subject
+    description = item.description
+    ticket = item.ticket
+    attachment = item.image.open()  # Получаем объект ImageFieldFile и открываем его
 
-        recipient_emails = [item.email]
-        subject = item.subject
-        description = item.description
-        ticket = item.ticket
-        attachment = item.image.open()  # Получаем объект ImageFieldFile и открываем его
-
-        # Отправляем письмо
-        send_email(recipient_emails, subject, description, ticket, attachment)
-
-
-    else:
-        bot.send_message(message.chat.id, "Пожалуйста, пришлите фото тестового прогона.")
+    # Отправляем письмо
+    send_email(recipient_emails, subject, description, ticket, attachment)
 
 
 def process_29_network_handler(message):
@@ -338,6 +326,7 @@ def process_29_network_handler(message):
 
     # Отправляем результат обработки пользователю
     bot.send_message(message.chat.id, response)
+
 
 # Обработчик кнопки "Инфо"
 @bot.message_handler(
