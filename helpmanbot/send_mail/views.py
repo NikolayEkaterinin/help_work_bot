@@ -168,10 +168,13 @@ def check_emails():
                             if attachment_paths:
                                 for file_path in attachment_paths:
                                     # Отправка файла в Telegram
-                                    send_file_to_telegram(telegram_id, file_path, message_text)
+                                    send_file_to_telegram(telegram_id,
+                                                          file_path,
+                                                          message_text)
                             else:
                                 # Если нет вложений, просто отправляем текст
-                                send_message_to_telegram(telegram_id, message_text)
+                                send_message_to_telegram(telegram_id,
+                                                         message_text)
 
                             # Пометка письма как отправленного
                             item.send_message = True

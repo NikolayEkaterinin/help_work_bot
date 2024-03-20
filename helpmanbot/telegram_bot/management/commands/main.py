@@ -193,16 +193,11 @@ def handle_fr_vendor_selection(call):
 def cancel_operation(message):
     bot.send_message(message.chat.id, "Операция отменена. Выберите другую команду или используйте /start.", reply_markup=types.ReplyKeyboardRemove())
 
-
-# Функция для отмены операции и возвращения к команде /start
-def cancel_operation(message):
-    bot.send_message(message.chat.id, "Операция отменена. Выберите другую команду или используйте /start.", reply_markup=types.ReplyKeyboardRemove())
-
-
+# Обработка запроса скрипта для смены S/N
 @bot.callback_query_handler(func=lambda call: call.data == "atol_serial_script")
 def handle_email_button(call):
     # Запрашиваем модель и номера ЗН ККТ у пользователя
-    bot.send_message(call.message.chat.id, "Добрый день! Вы запустили функцию запроса скрипта для смены серийного номера ФР АТОЛ. Для отмены операции просто введите отмена. Отмену можно произвести на всех шагах кроме предоставления тестового прогона, по этому подготовьте все зарание.")
+    bot.send_message(call.message.chat.id, "Добрый день! Вы запустили процесс формирования запроса скрипта для смены серийного номера ФР АТОЛ. Для отмены операции просто введите отмена. Отмену можно произвести на всех шагах кроме предоставления тестового прогона, по этому подготовьте все заранее.")
     bot.send_message(call.message.chat.id, "Введите модель ФР:")
     bot.register_next_step_handler(call.message, ask_model)
 
@@ -232,7 +227,7 @@ def validate_repair_sn(message, model):
         bot.register_next_step_handler(message, validate_repair_sn, model)
     else:
         # Если серийный номер прошел валидацию, переходим к запросу номера ЗН ККТ подменной
-        bot.send_message(message.chat.id, "Введите номер ЗН ККТ подменной:")
+        bot.send_message(message.chat.id, "Введите номер ЗН ККТ подменной платы(Платы донора):")
         bot.register_next_step_handler(message, ask_substitute_sn, model, repair_sn)
 
 
@@ -251,7 +246,6 @@ def ask_substitute_sn(message, model, repair_sn):
     email_text = email_text_template.replace("model", model)
     email_text = email_text.replace("repair_sn", repair_sn)
     email_text = email_text.replace("substitute_sn", substitute_sn)
-    print(email_text)
     # Определяем следующий доступный номер ticket
     last_item = Item.objects.last()
     if last_item:
@@ -270,7 +264,7 @@ def ask_substitute_sn(message, model, repair_sn):
     message.email_text = email_text
 
     # Запрашиваем UIN
-    bot.send_message(message.chat.id, "Введите UIN:")
+    bot.send_message(message.chat.id, "Введите UIN подменной платы. UIN обычно совпадает с серийным номером. Ссылка с инструкцией как его найти https://bit.ly/3i8yfao . В случае если он пустой, Вам необходимо отменить операцию и предварительно сделать запрос на скрипт для записи UIN:")
     bot.register_next_step_handler(message, lambda msg: ask_uin(msg, model, repair_sn, substitute_sn, next_ticket, custom_user, email_text))
 
 
@@ -280,6 +274,9 @@ def ask_uin(message, model, repair_sn, substitute_sn, ticket, custom_user, email
         return
 
     uin = message.text
+    email_text = email_text.replace("uin_ask", uin)
+    print(email_text)
+
 
     # Создаем экземпляр модели Item и заполняем его данными из переменных сообщения
     item = Item(
@@ -296,7 +293,7 @@ def ask_uin(message, model, repair_sn, substitute_sn, ticket, custom_user, email
     item.save()
 
     # Запрашиваем фото тестового прогона
-    bot.send_message(message.chat.id, "Введите Фото тестового прогона:")
+    bot.send_message(message.chat.id, "Загурзите фото тестового прогона, просьба выбирать прикрепить именно фото, а не файл:")
     bot.register_next_step_handler(message, lambda msg: ask_test_run_photo(msg, item))
 
 
@@ -321,11 +318,111 @@ def ask_test_run_photo(message, item):
     subject = item.subject
     description = item.description
 
-    # Заменяем заполнители в тексте письма на введенные пользователем данные
-    email_text = description.replace("uin_asc", item.uin)
-
+    print(item.uin)
     # Отправляем письмо
+    send_email(recipient_emails, subject, description, item.ticket, item.image.open())
+    bot.send_message(message.chat.id, "Ваш запрос сформирован и отправлен, ожидайте ответ")
+
+
+# Обработка запроса лицензии для ФР АТОЛ
+@bot.callback_query_handler(func=lambda call: call.data == "atol_licenses")
+def handle_atol_licenses(call):
+    # Запрашиваем модель у пользователя
+    bot.send_message(call.message.chat.id, "Добрый день! Вы запустили формирование запроса на получение лицензии для работы с маркированными товарами и ФФД 1.2. В случае если необходимо отменить процедуру просто напишите отмена. Приготовьте заранее чек с отчетом 'Информация о ККТ'")
+    bot.send_message(call.message.chat.id, "Введите модель ФР:")
+    bot.register_next_step_handler(call.message, ask_model)
+
+
+def ask_model_lic(message):
+    if message.text.lower() == "отмена":
+        cancel_operation(message)
+        return
+
+    model = message.text
+
+    # Запрашиваем номер ЗН ККТ в ремонте и передаем модель
+    bot.send_message(message.chat.id, "Введите номер ЗН ККТ для которого необходимо сформировать лицензию (длина 14 символов, начиная с '00'):")
+    bot.register_next_step_handler(message, validate_repair_sn_lic, model)
+
+
+def validate_repair_sn_lic(message, model):
+    if message.text.lower() == "отмена":
+        cancel_operation(message)
+        return
+
+    repair_sn = message.text
+
+    # Проверяем длину серийного номера и начинается ли он с '00'
+    if len(repair_sn) != 14 or not repair_sn.startswith('00'):
+        bot.send_message(message.chat.id, "Номер ЗН ККТ должен составлять 14 символов и начинаться с '00'. Пожалуйста, введите корректный номер:")
+        bot.register_next_step_handler(message, validate_repair_sn, model)
+    else:
+        # Если серийный номер прошел валидацию, переходим к запросу фото тестового прогона и передаем модель и серийный номер
+        ask_test_run_photo_lic(message, model, repair_sn)
+
+
+def ask_test_run_photo_lic(message, model, repair_sn):
+    # Запрашиваем фото информации о ККТ для подтверждения корректности прошивки
+    bot.send_message(message.chat.id, "Пришлите фото информации о ККТ для подтверждения корректности прошивки:")
+    # Регистрируем следующий шаг обработки - получение фото информации о ККТ
+    bot.register_next_step_handler(message, process_kkt_info_photo_lic, model, repair_sn)
+
+
+def process_kkt_info_photo_lic(message, model, repair_sn):
+    # Сохраняем фото информации о ККТ
+    photo = message.photo[-1]
+    file_id = photo.file_id
+    file_info = bot.get_file(file_id)
+    file_url = f"https://api.telegram.org/file/bot{TELEGRAM_TOKEN}/{file_info.file_path}"
+
+    # Сохраняем файл в модели Item
+    img_temp = tempfile.NamedTemporaryFile(delete=True)
+    img_temp.write(requests.get(file_url).content)
+    img_temp.flush()
+
+    last_item = Item.objects.last()
+    if last_item:
+        next_ticket = last_item.ticket + 1
+    else:
+        next_ticket = 1
+
+    # Получаем пользователя Telegram
+    telegram_user_id = message.from_user.id
+
+    # Ищем соответствующего пользователя в базе данных
+    custom_user, created = CustomUser.objects.get_or_create(telegram_id=telegram_user_id)
+
+    # Создаем экземпляр модели Item и заполняем его данными
+    item = Item(
+        ticket=next_ticket,
+        id_user=custom_user,
+        email=ATOL,
+        send_message=False,
+        subject='Запрос лицензии для ФР',
+    )
+
+    # Получаем шаблон письма из словаря atol_licenses и заменяем заполнители
+    email_text_template = email_templates.templates.get("atol_licenses")
+    email_text = email_text_template.replace("model", model)
+    email_text = email_text.replace("serial_nember", repair_sn)
+    print(email_text)
+    # Заполняем параметр description экземпляра модели текстом письма
+    item.description = email_text
+
+    # Сохраняем фото в модели Item
+    item.image.save(f"{file_id}.jpg", InMemoryUploadedFile(
+        img_temp, None, f"{file_id}.jpg", "image/jpeg", img_temp.tell(), None
+    ), save=True)
+
+    # Отправляем письмо с данными
+    recipient_emails = [item.email]
+    subject = item.subject
     send_email(recipient_emails, subject, email_text, item.ticket, item.image.open())
+    bot.send_message(message.chat.id, "Ваш запрос отправлен, ожидайте ответ.")
+
+    # Добавляем регистрацию следующего шага после запроса фото
+    bot.register_next_step_handler(message, ask_test_run_photo, model, repair_sn)
+
 
 
 def process_29_network_handler(message):

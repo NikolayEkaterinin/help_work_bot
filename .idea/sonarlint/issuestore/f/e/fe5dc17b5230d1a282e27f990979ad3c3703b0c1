@@ -1,22 +1,23 @@
 
-ípython:S1192c"ÈDefine a constant instead of duplicating this literal "ĞŸÑ€Ğ¾Ğ¸Ğ·Ğ¾ÑˆĞ»Ğ° Ğ¾ÑˆĞ¸Ğ±ĞºĞ° Ğ¿Ñ€Ğ¸ Ğ²Ñ‹Ğ¿Ğ¾Ğ»Ğ½ĞµĞ½Ğ¸Ğ¸ Ğ¾Ğ¿ĞµÑ€Ğ°Ñ†Ğ¸Ğ¸. ĞŸĞ¾Ğ¶Ğ°Ğ»ÑƒĞ¹ÑÑ‚Ğ°, Ğ¿Ğ¾Ğ¿Ñ€Ğ¾Ğ±ÑƒĞ¹Ñ‚Ğµ ĞµÑ‰Ğµ Ñ€Ğ°Ğ·." 4 times.(ÌŒ§ğÿÿÿÿÿ8ş—’Ôå1
-rpython:S1192Ó"MDefine a constant instead of duplicating this literal "Ğ¾Ñ‚Ğ¼ĞµĞ½Ğ°" 4 times.(¯¥’±ıÿÿÿÿ8€˜’Ôå1
-Upython:S1481K"1Replace unused local variable "created" with "_".(¡ç£ûÿÿÿÿ8€˜’Ôå1
-ipython:S3457X"EAdd replacement fields or use a normal string instead of an f-string.(á‡µÛüÿÿÿÿ8˜’Ôå1
-Spython:S1481—"3Remove the unused local variable "recipient_email".(Î­ÄÂ8‚˜’Ôå1
-Vpython:S1481‰"1Replace unused local variable "created" with "_".(Ô›ª÷ûÿÿÿÿ8õŠ¶×å1
-Vpython:S1172•"1Remove the unused function parameter "repair_sn".(§íàûÿÿÿÿ8ü·­Ûå1
-Zpython:S1172•"5Remove the unused function parameter "substitute_sn".(§íàûÿÿÿÿ8ü·­Ûå1
-Rpython:S1172•"-Remove the unused function parameter "model".(§íàûÿÿÿÿ8ü·­Ûå1
-jpython:S3457ä"EAdd replacement fields or use a normal string instead of an f-string.(ğÈŸÜüÿÿÿÿ8†˜’Ôå1
-jpython:S3457å"EAdd replacement fields or use a normal string instead of an f-string.(ğÈŸÜüÿÿÿÿ8†˜’Ôå1
-jpython:S3457ç"EAdd replacement fields or use a normal string instead of an f-string.(ğÈŸÜüÿÿÿÿ8†˜’Ôå1
-jpython:S3457é"EAdd replacement fields or use a normal string instead of an f-string.(ğÈŸÜüÿÿÿÿ8†˜’Ôå1
-jpython:S3457ë"EAdd replacement fields or use a normal string instead of an f-string.(ğÈŸÜüÿÿÿÿ8‡˜’Ôå1
-jpython:S3457í"EAdd replacement fields or use a normal string instead of an f-string.(ğÈŸÜüÿÿÿÿ8‡˜’Ôå1
-jpython:S3457²"EAdd replacement fields or use a normal string instead of an f-string.(ğÈŸÜüÿÿÿÿ8‡˜’Ôå1
-jpython:S3457³"EAdd replacement fields or use a normal string instead of an f-string.(ğÈŸÜüÿÿÿÿ8‡˜’Ôå1
-jpython:S3457µ"EAdd replacement fields or use a normal string instead of an f-string.(ğÈŸÜüÿÿÿÿ8‡˜’Ôå1
-jpython:S3457·"EAdd replacement fields or use a normal string instead of an f-string.(ğÈŸÜüÿÿÿÿ8‡˜’Ôå1
-jpython:S3457¹"EAdd replacement fields or use a normal string instead of an f-string.(ğÈŸÜüÿÿÿÿ8‡˜’Ôå1
-jpython:S3457»"EAdd replacement fields or use a normal string instead of an f-string.(ğÈŸÜüÿÿÿÿ8‡˜’Ôå1
+ípython:S1192c"ÈDefine a constant instead of duplicating this literal "ĞŸÑ€Ğ¾Ğ¸Ğ·Ğ¾ÑˆĞ»Ğ° Ğ¾ÑˆĞ¸Ğ±ĞºĞ° Ğ¿Ñ€Ğ¸ Ğ²Ñ‹Ğ¿Ğ¾Ğ»Ğ½ĞµĞ½Ğ¸Ğ¸ Ğ¾Ğ¿ĞµÑ€Ğ°Ñ†Ğ¸Ğ¸. ĞŸĞ¾Ğ¶Ğ°Ğ»ÑƒĞ¹ÑÑ‚Ğ°, Ğ¿Ğ¾Ğ¿Ñ€Ğ¾Ğ±ÑƒĞ¹Ñ‚Ğµ ĞµÑ‰Ğµ Ñ€Ğ°Ğ·." 4 times.(ÌŒ§ğÿÿÿÿÿ8¥¼ıêå1
+rpython:S1192Î"MDefine a constant instead of duplicating this literal "Ğ¾Ñ‚Ğ¼ĞµĞ½Ğ°" 6 times.(¯¥’±ıÿÿÿÿ8¨¼ıêå1
+Upython:S1481K"1Replace unused local variable "created" with "_".(¡ç£ûÿÿÿÿ8¨¼ıêå1
+ipython:S3457X"EAdd replacement fields or use a normal string instead of an f-string.(á‡µÛüÿÿÿÿ8¨¼ıêå1
+Spython:S1481—"3Remove the unused local variable "recipient_email".(Î­ÄÂ8©¼ıêå1
+Vpython:S1481ƒ"1Replace unused local variable "created" with "_".(Ô›ª÷ûÿÿÿÿ8©¼ıêå1
+Zpython:S1172"5Remove the unused function parameter "substitute_sn".(§íàûÿÿÿÿ8©¼ıêå1
+Rpython:S1172"-Remove the unused function parameter "model".(§íàûÿÿÿÿ8©¼ıêå1
+Vpython:S1172"1Remove the unused function parameter "repair_sn".(§íàûÿÿÿÿ8ø’’ëå1
+Vpython:S1481‰"1Replace unused local variable "created" with "_".(Ô›ª÷ûÿÿÿÿ8©¼ıêå1
+jpython:S3457Å"EAdd replacement fields or use a normal string instead of an f-string.(ğÈŸÜüÿÿÿÿ8ª¼ıêå1
+jpython:S3457Æ"EAdd replacement fields or use a normal string instead of an f-string.(ğÈŸÜüÿÿÿÿ8ª¼ıêå1
+jpython:S3457È"EAdd replacement fields or use a normal string instead of an f-string.(ğÈŸÜüÿÿÿÿ8ª¼ıêå1
+jpython:S3457Ê"EAdd replacement fields or use a normal string instead of an f-string.(ğÈŸÜüÿÿÿÿ8ª¼ıêå1
+jpython:S3457Ì"EAdd replacement fields or use a normal string instead of an f-string.(ğÈŸÜüÿÿÿÿ8ª¼ıêå1
+jpython:S3457Î"EAdd replacement fields or use a normal string instead of an f-string.(ğÈŸÜüÿÿÿÿ8ª¼ıêå1
+jpython:S3457“"EAdd replacement fields or use a normal string instead of an f-string.(ğÈŸÜüÿÿÿÿ8ª¼ıêå1
+jpython:S3457”"EAdd replacement fields or use a normal string instead of an f-string.(ğÈŸÜüÿÿÿÿ8ª¼ıêå1
+jpython:S3457–"EAdd replacement fields or use a normal string instead of an f-string.(ğÈŸÜüÿÿÿÿ8ª¼ıêå1
+jpython:S3457˜"EAdd replacement fields or use a normal string instead of an f-string.(ğÈŸÜüÿÿÿÿ8ª¼ıêå1
+jpython:S3457š"EAdd replacement fields or use a normal string instead of an f-string.(ğÈŸÜüÿÿÿÿ8«¼ıêå1
+jpython:S3457œ"EAdd replacement fields or use a normal string instead of an f-string.(ğÈŸÜüÿÿÿÿ8«¼ıêå1
