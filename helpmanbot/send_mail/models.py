@@ -46,5 +46,9 @@ class Item(models.Model):
         default=False,
 
     )
+    uin = models.TextField(
+        verbose_name='uin',
+        default='None',  # добавлено значение по умолчанию
+    )
 
 

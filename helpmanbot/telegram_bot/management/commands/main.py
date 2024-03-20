@@ -269,14 +269,17 @@ def ask_substitute_sn(message, model, repair_sn):
     message.custom_user = custom_user
     message.email_text = email_text
 
-    # Запрашиваем фото тестового прогона
-    bot.send_message(message.chat.id, "Пришлите фото тестового прогона:")
-    # Передаем атрибуты ticket, custom_user и email_text в функцию ask_test_run_photo
-    bot.register_next_step_handler(message, ask_test_run_photo, next_ticket, custom_user, email_text)
+    # Запрашиваем UIN
+    bot.send_message(message.chat.id, "Введите UIN:")
+    bot.register_next_step_handler(message, lambda msg: ask_uin(msg, model, repair_sn, substitute_sn, next_ticket, custom_user, email_text))
 
 
-def ask_test_run_photo(message, ticket, custom_user, email_text):
-    bot.send_message(message.chat.id, "Спасибо! Фото получено.")
+def ask_uin(message, model, repair_sn, substitute_sn, ticket, custom_user, email_text):
+    if message.text.lower() == "отмена":
+        cancel_operation(message)
+        return
+
+    uin = message.text
 
     # Создаем экземпляр модели Item и заполняем его данными из переменных сообщения
     item = Item(
@@ -285,8 +288,20 @@ def ask_test_run_photo(message, ticket, custom_user, email_text):
         description=email_text,
         email=ATOL,
         send_message=False,
-        subject='Запрос скрипта для смены заводского номера'
+        subject='Запрос скрипта для смены заводского номера',
+        uin=uin
     )
+
+    # Сохраняем экземпляр модели в базе данных
+    item.save()
+
+    # Запрашиваем фото тестового прогона
+    bot.send_message(message.chat.id, "Введите Фото тестового прогона:")
+    bot.register_next_step_handler(message, lambda msg: ask_test_run_photo(msg, item))
+
+
+def ask_test_run_photo(message, item):
+    bot.send_message(message.chat.id, "Спасибо! Фото получено.")
 
     # Получаем файл из сообщения Telegram
     photo = message.photo[-1]
@@ -302,17 +317,15 @@ def ask_test_run_photo(message, ticket, custom_user, email_text):
         img_temp, None, f"{file_id}.jpg", "image/jpeg", img_temp.tell(), None
     ), save=True)
 
-    # Сохраняем экземпляр модели в базе данных
-    item.save()
-
     recipient_emails = [item.email]
     subject = item.subject
     description = item.description
-    ticket = item.ticket
-    attachment = item.image.open()  # Получаем объект ImageFieldFile и открываем его
+
+    # Заменяем заполнители в тексте письма на введенные пользователем данные
+    email_text = description.replace("uin_asc", item.uin)
 
     # Отправляем письмо
-    send_email(recipient_emails, subject, description, ticket, attachment)
+    send_email(recipient_emails, subject, email_text, item.ticket, item.image.open())
 
 
 def process_29_network_handler(message):

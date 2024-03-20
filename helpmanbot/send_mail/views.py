@@ -49,7 +49,7 @@ def send_email(recipient_email, subject, description, ticket, attachment=None):
 
     try:
         # Устанавливаем соединение с SMTP-сервером и отправляем письмо
-        with smtplib.SMTP_SSL("SMTP.yandex.ru", 465) as server:
+        with smtplib.SMTP_SSL("SMTP.mail.ru", 465) as server:
             server.login(sender_email, sender_password)
             server.send_message(message)
         print("Письмо успешно отправлено!")
@@ -84,7 +84,7 @@ def send_file_to_telegram(telegram_id, file_path, caption=None):
 # Ожидание ответа письма
 def check_emails():
     # Подключение к почтовому серверу
-    mail = imaplib.IMAP4_SSL('imap.yandex.ru', 993)
+    mail = imaplib.IMAP4_SSL('imap.mail.ru', 993)
     mail.login(SENDER_EMAIL, SENDER_PASSWORD)
     mail.select('inbox')
 
@@ -163,7 +163,7 @@ def check_emails():
                             telegram_id = item.id_user.telegram_id
 
                             # Подготовка сообщения для отправки пользователю с текстом ответного письма и вложениями
-                            message_text = f"Получено ответное письмо. Тема: {subject}. Текст: {message_body}"
+                            message_text = f"Получен ответ на Ваше обращение. Текст: {message_body}"
                             print(message_text)
                             if attachment_paths:
                                 for file_path in attachment_paths:
