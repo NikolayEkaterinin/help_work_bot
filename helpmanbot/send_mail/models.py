@@ -10,7 +10,6 @@ class Item(models.Model):
     ticket = models.IntegerField(
         verbose_name='тикет обращения',
         blank=False,
-
     )
     id_user = models.ForeignKey(
         CustomUser,
@@ -31,24 +30,19 @@ class Item(models.Model):
         verbose_name='Тема письма',
         blank=False,
     )
-    image = models.ImageField(
-        verbose_name='Прикладываемое фото',
-        upload_to="email_photo/",
-        validators=[FileExtensionValidator(['jpg', 'jpeg', 'png', 'bmp']),
-                    MaxValueValidator(
-                        5242880,
-                        message='Размер не может превышать 50 МБ')],
+    image = models.FileField(
+        verbose_name='Прикладываемый файл',
+        upload_to="email_files/",
         null=True,
         blank=True,
     )
     send_message = models.BooleanField(
         verbose_name='Статус доставки пользователю',
         default=False,
-
     )
     uin = models.TextField(
         verbose_name='uin',
-        default='None',  # добавлено значение по умолчанию
+        default='None',
     )
 
 

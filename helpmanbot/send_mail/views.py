@@ -4,14 +4,14 @@ import smtplib
 import uuid
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
-from email.mime.image import MIMEImage
 from dotenv import load_dotenv
 import imaplib
 import email
 from email.header import decode_header
 from .models import Item
 import requests
-import base64
+from email.mime.base import MIMEBase
+
 load_dotenv()
 
 SENDER_EMAIL = os.getenv('sender_email')
@@ -22,7 +22,7 @@ sender_password = SENDER_PASSWORD
 
 
 # Период проверки наличия ответных писем (1 минута)
-CHECK_INTERVAL = 60
+CHECK_INTERVAL = 10
 TELEGRAM_TOKEN = os.getenv('TELEGRAM_TOKEN')
 
 
@@ -40,12 +40,22 @@ def send_email(recipient_email, subject, description, ticket, attachment=None):
 
     # Если указано вложение
     if attachment:
-        # Получаем содержимое файла вложения
+        # Создаем объект MIMEBase с правильным типом содержимого
         attachment_content = attachment.read()
-        # Создаем объект MIMEImage из данных изображения
-        image_mime = MIMEImage(attachment_content)
-        image_mime.add_header('Content-Disposition', 'attachment', filename=attachment.name)
-        message.attach(image_mime)
+        mime_type, _ = mimetypes.guess_type(attachment.name)
+        if mime_type is None:
+            mime_type = 'application/octet-stream'  # Если тип MIME не может быть угадан, устанавливаем общий тип
+        maintype, subtype = mime_type.split('/')
+        attachment_mime = MIMEBase(maintype, subtype)
+        attachment_mime.set_payload(attachment_content)
+        # Добавляем заголовок Content-Disposition, указывающий имя файла
+        attachment_mime.add_header('Content-Disposition', f'attachment; filename="{attachment.name}"')
+        # Кодируем содержимое в base64
+        from email.encoders import encode_base64
+        encode_base64(attachment_mime)
+
+        # Добавляем вложение к сообщению
+        message.attach(attachment_mime)
 
     try:
         # Устанавливаем соединение с SMTP-сервером и отправляем письмо
@@ -118,7 +128,11 @@ def check_emails():
 
                                 # Ищем текстовую часть письма
                                 if content_type == "text/plain" and "attachment" not in content_disposition:
-                                    message_body = part.get_payload(decode=True).decode()
+                                    # Определение кодировки из заголовков сообщения
+                                    charset = part.get_content_charset()
+
+                                    # Получение тела сообщения с учетом определенной кодировки
+                                    message_body = part.get_payload(decode=True).decode(charset)
                                     break
                         else:
                             message_body = msg.get_payload(

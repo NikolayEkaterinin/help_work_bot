@@ -239,8 +239,7 @@ def ask_substitute_sn(message, model, repair_sn):
     substitute_sn = message.text
 
     # Получаем текст письма
-    template_key = "atol_serial_script"
-    email_text_template = email_templates.get_template(template_key)
+
 
     # Заменяем заполнители в тексте письма на введенные пользователем данные
     email_text = email_text_template.replace("model", model)
@@ -285,7 +284,7 @@ def ask_uin(message, model, repair_sn, substitute_sn, ticket, custom_user, email
         description=email_text,
         email=ATOL,
         send_message=False,
-        subject='Запрос скрипта для смены заводского номера',
+        subject=f'Запрос скрипта для смены заводского номера. ФР {model}',
         uin=uin
     )
 
@@ -330,7 +329,7 @@ def handle_atol_licenses(call):
     # Запрашиваем модель у пользователя
     bot.send_message(call.message.chat.id, "Добрый день! Вы запустили формирование запроса на получение лицензии для работы с маркированными товарами и ФФД 1.2. В случае если необходимо отменить процедуру просто напишите отмена. Приготовьте заранее чек с отчетом 'Информация о ККТ'")
     bot.send_message(call.message.chat.id, "Введите модель ФР:")
-    bot.register_next_step_handler(call.message, ask_model)
+    bot.register_next_step_handler(call.message, ask_model_lic)
 
 
 def ask_model_lic(message):
@@ -355,7 +354,7 @@ def validate_repair_sn_lic(message, model):
     # Проверяем длину серийного номера и начинается ли он с '00'
     if len(repair_sn) != 14 or not repair_sn.startswith('00'):
         bot.send_message(message.chat.id, "Номер ЗН ККТ должен составлять 14 символов и начинаться с '00'. Пожалуйста, введите корректный номер:")
-        bot.register_next_step_handler(message, validate_repair_sn, model)
+        bot.register_next_step_handler(message, validate_repair_sn_lic, model)
     else:
         # Если серийный номер прошел валидацию, переходим к запросу фото тестового прогона и передаем модель и серийный номер
         ask_test_run_photo_lic(message, model, repair_sn)
@@ -423,6 +422,72 @@ def process_kkt_info_photo_lic(message, model, repair_sn):
     # Добавляем регистрацию следующего шага после запроса фото
     bot.register_next_step_handler(message, ask_test_run_photo, model, repair_sn)
 
+
+# Обработка запроса скрипта для записи UIN
+@bot.callback_query_handler(func=lambda call: call.data == "atol_uin_script")
+def handle_atol_licenses(call):
+    # Запрашиваем модель у пользователя
+    bot.send_message(call.message.chat.id, "Добрый день! Вы запустили формирование запроса на получение скрипта для записи UIN. Ознакомтесь заранее с инстукцией по ссылке https://bit.ly/3i8yfao. Если поле UIN пустое то продолжаем.")
+    bot.send_message(call.message.chat.id, "Введите модель ФР:")
+    bot.register_next_step_handler(call.message, ask_model_uin)
+
+
+def ask_model_uin(message):
+    if message.text.lower() == "отмена":
+        cancel_operation(message)
+        return
+
+    model = message.text
+
+    # Запрашиваем номер ЗН ККТ в ремонте и передаем модель
+    bot.send_message(message.chat.id, "Введите номер ЗН ККТ для которого необходимо запросить скрипт (длина 14 символов, начиная с '00'):")
+    bot.register_next_step_handler(message, validate_repair_sn_uin, model)
+
+
+def validate_repair_sn_uin(message, model):
+    if message.text.lower() == "отмена":
+        cancel_operation(message)
+        return
+
+    repair_sn = message.text
+
+    # Проверяем длину серийного номера и начинается ли он с '00'
+    if len(repair_sn) != 14 or not repair_sn.startswith('00'):
+        bot.send_message(message.chat.id, "Номер ЗН ККТ должен составлять 14 символов и начинаться с '00'. Пожалуйста, введите корректный номер:")
+        bot.register_next_step_handler(message, validate_repair_sn_uin, model)
+    else:
+        # Если серийный номер прошел валидацию, переходим к формированию запроса
+        last_item = Item.objects.last()
+        if last_item:
+            next_ticket = last_item.ticket + 1
+        else:
+            next_ticket = 1
+
+        # Получаем пользователя Telegram
+        telegram_user_id = message.from_user.id
+
+        # Ищем соответствующего пользователя в базе данных
+        custom_user, created = CustomUser.objects.get_or_create(telegram_id=telegram_user_id)
+
+        # Создаем экземпляр модели Item и заполняем его данными
+        item = Item(
+            ticket=next_ticket,
+            id_user=custom_user,
+            email=ATOL,
+            send_message=False,
+            subject=f'Запрос скрипта для записи UIN. ФР {model}',
+        )
+        template_key = "atol_uin"
+        email_text_template = email_templates.templates.get("atol_uin")
+        email_text_template = email_templates.get_template(template_key)
+        email_text = email_text_template.replace("model", model)
+        email_text = email_text.replace("serial_number", repair_sn)
+        item.description = email_text
+        # Сохраняем экземпляр модели в базе данных
+        item.save()
+        recipient_emails = [item.email]
+        send_email(recipient_emails, item.subject, item.description, item.ticket)
+        bot.send_message(message.chat.id, "Ваш запрос сформирован и отправлен, ожидайте ответ")
 
 
 def process_29_network_handler(message):
