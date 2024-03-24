@@ -16,12 +16,12 @@ from telegram_bot.views import process_29_network
 
 from send_mail.email_templates import EmailTemplates
 from send_mail.models import Item
-from send_mail.views import send_email, check_emails
-import time
+from send_mail.views import send_email
 # Загрузка переменных окружения
 load_dotenv()
 
 ATOL = os.getenv('Atol_email')
+TELEGRAM_TOKEN = os.getenv('TELEGRAM_TOKEN')
 CHECK_INTERVAL = 60
 email_templates = EmailTemplates()
 descriptions = {}
@@ -43,7 +43,7 @@ class Command(BaseCommand):
 
 
 # Инициализация бота
-TELEGRAM_TOKEN = os.getenv('TELEGRAM_TOKEN')
+
 bot = telebot.TeleBot(TELEGRAM_TOKEN)
 
 # Настройка логирования
@@ -84,8 +84,12 @@ def handle_start(message):
 
         # Проверяем, заблокирован ли пользователь
         if user.access == 1:
-            # Пользователь заблокирован, отправляем сообщение с отказом в доступе
-            bot.send_message(user_id, f'''Вам запрещен доступ к боту. Необходимо обратиться к вашему старшему инженеру для
+            # Пользователь заблокирован,
+            # отправляем сообщение с отказом в доступе
+            bot.send_message(
+                user_id,
+                '''Вам запрещен доступ к боту.
+                Необходимо обратиться к вашему старшему инженеру для
             получения доступа. Обязательно необходимо предоставить Ваш ID.''')
             bot.send_message(user_id, f'Ваш ID {user_id}')
             return
@@ -96,7 +100,8 @@ def handle_start(message):
     except Exception as e:
         logging.error(f"Произошла ошибка: {e}")
         bot.send_message(message.from_user.id,
-                         "Произошла ошибка при выполнении операции. Пожалуйста, попробуйте еще раз.")
+                         """Произошла ошибка при выполнении операции.
+                         Пожалуйста,попробуйте еще раз.""")
 
 
 def send_keyboard(message):
@@ -114,7 +119,8 @@ def send_keyboard(message):
     # Создаем клавиатуру с папками и файлами в качестве кнопок
     keyboard = telebot.types.ReplyKeyboardMarkup(row_width=1)
 
-    # Добавляем кнопку "Инфо" в самом верху, только если текущий путь - базовый каталог
+    # Добавляем кнопку "Инфо" в самом верху,
+    # только если текущий путь - базовый каталог
     if current_path == base_folder:
         keyboard.add('Инфо. Актуальные образы')
         keyboard.add('29 сеть')
@@ -139,22 +145,15 @@ def send_keyboard(message):
 @bot.message_handler(func=lambda message: message.text == 'Обращение по ФР')
 def handle_fr_inquiry(message):
     keyboard = telebot.types.InlineKeyboardMarkup()
-    button_atol = telebot.types.InlineKeyboardButton(text="АТОЛ", callback_data="atol")
-    button_shtrih = telebot.types.InlineKeyboardButton(text="ШТРИХ", callback_data="shtrih")
+    button_atol = telebot.types.InlineKeyboardButton(
+        text="АТОЛ", callback_data="atol")
+    button_shtrih = telebot.types.InlineKeyboardButton(
+        text="ШТРИХ", callback_data="shtrih")
     keyboard.row(button_atol, button_shtrih)
-    bot.send_message(message.chat.id, "Добрый день! Выберите производителя ФР:", reply_markup=keyboard)
-
-
-# Обработчик выбора производителя ФР
-@bot.callback_query_handler(func=lambda call: call.data in ["atol", "shtrih"])
-def handle_fr_vendor_selection(call):
-    recipient_email = ""
-    if call.data == "atol":
-        handle_fr_vendor_selection(call)
-        recipient_email = "eh37@ya.ru"
-    elif call.data == "shtrih":
-        handle_fr_vendor_selection(call)
-        recipient_email = "n.ekaterinin@souyz76.ru"
+    bot.send_message(
+        message.chat.id,
+        "Добрый день! Выберите производителя ФР:",
+        reply_markup=keyboard)
 
 
 # Обработчик выбора производителя ФР "АТОЛ"
@@ -163,41 +162,61 @@ def handle_fr_vendor_selection(call):
     if call.data == "atol":
         keyboard = telebot.types.InlineKeyboardMarkup()
         keyboard.row(
-            telebot.types.InlineKeyboardButton("Скрипт для смены заводского номера", callback_data="atol_serial_script")
+            telebot.types.InlineKeyboardButton(
+                "Скрипт для смены заводского номера",
+                callback_data="atol_serial_script")
         )
         keyboard.row(
-            telebot.types.InlineKeyboardButton("Получение лицензий", callback_data="atol_licenses")
+            telebot.types.InlineKeyboardButton(
+                "Получение лицензий",
+                callback_data="atol_licenses")
         )
         keyboard.row(
-            telebot.types.InlineKeyboardButton("Скрипт для получения UIN", callback_data="atol_uin_script")
+            telebot.types.InlineKeyboardButton(
+                "Скрипт для получения UIN",
+                callback_data="atol_uin_script")
         )
         keyboard.row(
-            telebot.types.InlineKeyboardButton("Данная модель не поддерживается", callback_data="atol_not_supported")
+            telebot.types.InlineKeyboardButton(
+                "Данная модель не поддерживается",
+                callback_data="atol_not_supported")
         )
         keyboard.row(
-            telebot.types.InlineKeyboardButton("Мигратор на 5 платформу", callback_data="atol_platform_migrator")
+            telebot.types.InlineKeyboardButton(
+                "Мигратор на 5 платформу",
+                callback_data="atol_platform_migrator")
         )
-        bot.send_message(call.message.chat.id, "Выберите тему обращения:", reply_markup=keyboard)
+        bot.send_message(call.message.chat.id, "Выберите тему обращения:",
+                         reply_markup=keyboard)
     elif call.data == "shtrih":
         keyboard = telebot.types.InlineKeyboardMarkup()
         keyboard.row(
-            telebot.types.InlineKeyboardButton("Смена заводского номера", callback_data="shtrih_serial_change")
+            telebot.types.InlineKeyboardButton(
+                "Смена заводского номера",
+                callback_data="shtrih_serial_change")
         )
         keyboard.row(
-            telebot.types.InlineKeyboardButton("Получение лицензий", callback_data="shtrih_licenses")
+            telebot.types.InlineKeyboardButton("Получение лицензий",
+                                               callback_data="shtrih_licenses")
         )
-        bot.send_message(call.message.chat.id, "Выберите тему для обращения:", reply_markup=keyboard)
+        bot.send_message(call.message.chat.id, "Выберите тему для обращения:",
+                         reply_markup=keyboard)
 
 
 # Функция для отмены операции и возвращения к команде /start
 def cancel_operation(message):
-    bot.send_message(message.chat.id, "Операция отменена. Выберите другую команду или используйте /start.", reply_markup=types.ReplyKeyboardRemove())
+    bot.send_message(message.chat.id, """Операция отменена. Выберите другую команду или используйте /start.""",
+                     reply_markup=types.ReplyKeyboardRemove())
+
 
 # Обработка запроса скрипта для смены S/N
-@bot.callback_query_handler(func=lambda call: call.data == "atol_serial_script")
+@bot.callback_query_handler(
+        func=lambda call: call.data == "atol_serial_script")
 def handle_email_button(call):
     # Запрашиваем модель и номера ЗН ККТ у пользователя
-    bot.send_message(call.message.chat.id, "Добрый день! Вы запустили процесс формирования запроса скрипта для смены серийного номера ФР АТОЛ. Для отмены операции просто введите отмена. Отмену можно произвести на всех шагах кроме предоставления тестового прогона, по этому подготовьте все заранее.")
+    bot.send_message(
+        call.message.chat.id,
+        """Добрый день! Вы запустили процесс формирования запроса скрипта для смены серийного номера ФР АТОЛ. Для отмены операции просто введите отмена. Отмену можно произвести на всех шагах кроме предоставления тестового прогона, по этому подготовьте все заранее.""")
     bot.send_message(call.message.chat.id, "Введите модель ФР:")
     bot.register_next_step_handler(call.message, ask_model)
 
@@ -210,7 +229,9 @@ def ask_model(message):
     model = message.text
 
     # Запрашиваем номер ЗН ККТ в ремонте
-    bot.send_message(message.chat.id, "Введите номер ЗН ККТ в ремонте (длина 14 символов, начиная с '00'):")
+    bot.send_message(
+        message.chat.id,
+        "Введите номер ЗН ККТ в ремонте (длина 14 символов, начиная с '00'):")
     bot.register_next_step_handler(message, validate_repair_sn, model)
 
 
@@ -223,12 +244,17 @@ def validate_repair_sn(message, model):
 
     # Проверяем длину серийного номера и начинается ли он с '00'
     if len(repair_sn) != 14 or not repair_sn.startswith('00'):
-        bot.send_message(message.chat.id, "Номер ЗН ККТ должен составлять 14 символов и начинаться с '00'. Пожалуйста, введите корректный номер:")
+        bot.send_message(
+            message.chat.id,
+            """Номер ЗН ККТ должен составлять 14 символов и начинаться с '00'.  Пожалуйста, введите корректный номер:""")
         bot.register_next_step_handler(message, validate_repair_sn, model)
     else:
-        # Если серийный номер прошел валидацию, переходим к запросу номера ЗН ККТ подменной
-        bot.send_message(message.chat.id, "Введите номер ЗН ККТ подменной платы(Платы донора):")
-        bot.register_next_step_handler(message, ask_substitute_sn, model, repair_sn)
+        # Если серийный номер прошел валидацию,
+        # переходим к запросу номера ЗН ККТ подменной
+        bot.send_message(message.chat.id,
+                         "Введите номер ЗН ККТ подменной платы(Платы донора):")
+        bot.register_next_step_handler(message, ask_substitute_sn, model,
+                                       repair_sn)
 
 
 def ask_substitute_sn(message, model, repair_sn):
@@ -240,7 +266,7 @@ def ask_substitute_sn(message, model, repair_sn):
 
     # Получаем текст письма
 
-
+    email_text_template = email_templates.templates.get('atol_serial_script')
     # Заменяем заполнители в тексте письма на введенные пользователем данные
     email_text = email_text_template.replace("model", model)
     email_text = email_text.replace("repair_sn", repair_sn)
@@ -255,7 +281,8 @@ def ask_substitute_sn(message, model, repair_sn):
     telegram_user_id = message.from_user.id
 
     # Ищем соответствующего пользователя в базе данных
-    custom_user, created = CustomUser.objects.get_or_create(telegram_id=telegram_user_id)
+    custom_user, created = CustomUser.objects.get_or_create(
+        telegram_id=telegram_user_id)
 
     # Сохраняем данные в переменные сообщения
     message.ticket = next_ticket
@@ -263,11 +290,19 @@ def ask_substitute_sn(message, model, repair_sn):
     message.email_text = email_text
 
     # Запрашиваем UIN
-    bot.send_message(message.chat.id, "Введите UIN подменной платы. UIN обычно совпадает с серийным номером. Ссылка с инструкцией как его найти https://bit.ly/3i8yfao . В случае если он пустой, Вам необходимо отменить операцию и предварительно сделать запрос на скрипт для записи UIN:")
-    bot.register_next_step_handler(message, lambda msg: ask_uin(msg, model, repair_sn, substitute_sn, next_ticket, custom_user, email_text))
+    bot.send_message(
+        message.chat.id,
+        """Введите UIN подменной платы. UIN обычно совпадает с серийным номером. Ссылка с инструкцией как его найти https://bit.ly/3i8yfao. В случае если он пустой, Вам необходимо отменить операцию и предварительно сделать запрос на скрипт для записи UIN:""")
+    bot.register_next_step_handler(message, lambda msg: ask_uin(msg, model,
+                                                                repair_sn,
+                                                                substitute_sn,
+                                                                next_ticket,
+                                                                custom_user,
+                                                                email_text))
 
 
-def ask_uin(message, model, repair_sn, substitute_sn, ticket, custom_user, email_text):
+def ask_uin(message, model, repair_sn, substitute_sn, ticket, custom_user,
+            email_text):
     if message.text.lower() == "отмена":
         cancel_operation(message)
         return
@@ -277,7 +312,8 @@ def ask_uin(message, model, repair_sn, substitute_sn, ticket, custom_user, email
     print(email_text)
 
 
-    # Создаем экземпляр модели Item и заполняем его данными из переменных сообщения
+    # Создаем экземпляр модели Item,
+    # заполняем его данными из переменных сообщения
     item = Item(
         ticket=ticket,
         id_user=custom_user,
@@ -292,8 +328,12 @@ def ask_uin(message, model, repair_sn, substitute_sn, ticket, custom_user, email
     item.save()
 
     # Запрашиваем фото тестового прогона
-    bot.send_message(message.chat.id, "Загурзите фото тестового прогона, просьба выбирать прикрепить именно фото, а не файл:")
-    bot.register_next_step_handler(message, lambda msg: ask_test_run_photo(msg, item))
+    bot.send_message(
+        message.chat.id,
+        """Загурзите фото тестового прогона,
+        просьба выбирать прикрепить именно фото, а не файл:""")
+    bot.register_next_step_handler(
+        message, lambda msg: ask_test_run_photo(msg, item))
 
 
 def ask_test_run_photo(message, item):
@@ -319,20 +359,35 @@ def ask_test_run_photo(message, item):
 
     print(item.uin)
     # Отправляем письмо
-    send_email(recipient_emails, subject, description, item.ticket, item.image.open())
-    bot.send_message(message.chat.id, "Ваш запрос сформирован и отправлен, ожидайте ответ")
+    send_email(recipient_emails, subject, description, item.ticket,
+               item.image.open())
+    bot.send_message(message.chat.id,
+                     "Ваш запрос сформирован и отправлен, ожидайте ответ")
 
 
-# Обработка запроса лицензии для ФР АТОЛ
-@bot.callback_query_handler(func=lambda call: call.data == "atol_licenses")
-def handle_atol_licenses(call):
+# Обработка запроса лицензии для ФР АТОЛ и мигратора на 5 платформу
+@bot.callback_query_handler(
+        func=lambda call: call.data in ["atol_licenses",
+                                        "atol_platform_migrator"])
+def handle_atol_callback(call):
+    if call.data == "atol_licenses":
+        greeting_message = """Добрый день! Вы запустили формирование запроса на получение лицензии для работы с маркированными товарами и ФФД 1.2. В случае если необходимо отменить процедуру просто напишите отмена. Приготовьте заранее чек с отчетом 'Информация о ККТ'"""
+        subject_text = 'Запрос лицензии для ФР'
+        template_name = "atol_licenses"
+    elif call.data == "atol_platform_migrator":
+        greeting_message = """Добрый день!
+        Вы запустили формирование запроса на получение мигратора на 5 платформу. В случае если необходимо отменить процедуру просто напишите отмена. Приготовьте заранее чек с отчетом 'Информация о ККТ'"""
+        subject_text = 'Запрос мигратора на 5 платформу'
+        template_name = "atol_migrator"
+
     # Запрашиваем модель у пользователя
-    bot.send_message(call.message.chat.id, "Добрый день! Вы запустили формирование запроса на получение лицензии для работы с маркированными товарами и ФФД 1.2. В случае если необходимо отменить процедуру просто напишите отмена. Приготовьте заранее чек с отчетом 'Информация о ККТ'")
+    bot.send_message(call.message.chat.id, greeting_message)
     bot.send_message(call.message.chat.id, "Введите модель ФР:")
-    bot.register_next_step_handler(call.message, ask_model_lic)
+    bot.register_next_step_handler(call.message, ask_model_lic, subject_text,
+                                   template_name)
 
 
-def ask_model_lic(message):
+def ask_model_lic(message, subject_text, template_name):
     if message.text.lower() == "отмена":
         cancel_operation(message)
         return
@@ -340,11 +395,14 @@ def ask_model_lic(message):
     model = message.text
 
     # Запрашиваем номер ЗН ККТ в ремонте и передаем модель
-    bot.send_message(message.chat.id, "Введите номер ЗН ККТ для которого необходимо сформировать лицензию (длина 14 символов, начиная с '00'):")
-    bot.register_next_step_handler(message, validate_repair_sn_lic, model)
+    bot.send_message(
+        message.chat.id,
+        """Введите номер ЗН ККТ для которого необходимо сформировать лицензию (длина 14 символов, начиная с '00'):""")
+    bot.register_next_step_handler(message, validate_repair_sn_lic, model,
+                                   subject_text, template_name)
 
 
-def validate_repair_sn_lic(message, model):
+def validate_repair_sn_lic(message, model, subject_text, template_name):
     if message.text.lower() == "отмена":
         cancel_operation(message)
         return
@@ -353,21 +411,30 @@ def validate_repair_sn_lic(message, model):
 
     # Проверяем длину серийного номера и начинается ли он с '00'
     if len(repair_sn) != 14 or not repair_sn.startswith('00'):
-        bot.send_message(message.chat.id, "Номер ЗН ККТ должен составлять 14 символов и начинаться с '00'. Пожалуйста, введите корректный номер:")
-        bot.register_next_step_handler(message, validate_repair_sn_lic, model)
+        bot.send_message(
+            message.chat.id,
+            """Номер ЗН ККТ должен составлять 14 символов и начинаться с '00'. Пожалуйста, введите корректный номер:""")
+        bot.register_next_step_handler(message, validate_repair_sn_lic,
+                                       model, subject_text, template_name)
     else:
         # Если серийный номер прошел валидацию, переходим к запросу фото тестового прогона и передаем модель и серийный номер
-        ask_test_run_photo_lic(message, model, repair_sn)
+        ask_test_run_photo_lic(message, model, repair_sn, subject_text,
+                               template_name)
 
 
-def ask_test_run_photo_lic(message, model, repair_sn):
+def ask_test_run_photo_lic(message, model, repair_sn, subject_text,
+                           template_name):
     # Запрашиваем фото информации о ККТ для подтверждения корректности прошивки
-    bot.send_message(message.chat.id, "Пришлите фото информации о ККТ для подтверждения корректности прошивки:")
+    bot.send_message(
+        message.chat.id,
+        "Пришлите отчет информации о ККТ:")
     # Регистрируем следующий шаг обработки - получение фото информации о ККТ
-    bot.register_next_step_handler(message, process_kkt_info_photo_lic, model, repair_sn)
+    bot.register_next_step_handler(message, process_kkt_info_photo_lic, model,
+                                   repair_sn, subject_text, template_name)
 
 
-def process_kkt_info_photo_lic(message, model, repair_sn):
+def process_kkt_info_photo_lic(message, model, repair_sn, subject_text,
+                               template_name):
     # Сохраняем фото информации о ККТ
     photo = message.photo[-1]
     file_id = photo.file_id
@@ -389,7 +456,8 @@ def process_kkt_info_photo_lic(message, model, repair_sn):
     telegram_user_id = message.from_user.id
 
     # Ищем соответствующего пользователя в базе данных
-    custom_user, created = CustomUser.objects.get_or_create(telegram_id=telegram_user_id)
+    custom_user, created = CustomUser.objects.get_or_create(
+        telegram_id=telegram_user_id)
 
     # Создаем экземпляр модели Item и заполняем его данными
     item = Item(
@@ -397,18 +465,18 @@ def process_kkt_info_photo_lic(message, model, repair_sn):
         id_user=custom_user,
         email=ATOL,
         send_message=False,
-        subject='Запрос лицензии для ФР',
+        subject=subject_text,
     )
 
-    # Получаем шаблон письма из словаря atol_licenses и заменяем заполнители
-    email_text_template = email_templates.templates.get("atol_licenses")
+    # Получаем шаблон письма из словаря и заменяем заполнители
+    email_text_template = email_templates.templates.get(template_name)
     email_text = email_text_template.replace("model", model)
-    email_text = email_text.replace("serial_nember", repair_sn)
-    print(email_text)
+    email_text = email_text.replace("serial_number", repair_sn)
+
     # Заполняем параметр description экземпляра модели текстом письма
     item.description = email_text
 
-    # Сохраняем фото в модели Item
+    # Сохраняем фото в модели Item временно прикрываем
     item.image.save(f"{file_id}.jpg", InMemoryUploadedFile(
         img_temp, None, f"{file_id}.jpg", "image/jpeg", img_temp.tell(), None
     ), save=True)
@@ -416,18 +484,17 @@ def process_kkt_info_photo_lic(message, model, repair_sn):
     # Отправляем письмо с данными
     recipient_emails = [item.email]
     subject = item.subject
-    send_email(recipient_emails, subject, email_text, item.ticket, item.image.open())
+    send_email(recipient_emails, subject, email_text, item.ticket,
+               item.image.open())
     bot.send_message(message.chat.id, "Ваш запрос отправлен, ожидайте ответ.")
-
-    # Добавляем регистрацию следующего шага после запроса фото
-    bot.register_next_step_handler(message, ask_test_run_photo, model, repair_sn)
 
 
 # Обработка запроса скрипта для записи UIN
 @bot.callback_query_handler(func=lambda call: call.data == "atol_uin_script")
 def handle_atol_licenses(call):
     # Запрашиваем модель у пользователя
-    bot.send_message(call.message.chat.id, "Добрый день! Вы запустили формирование запроса на получение скрипта для записи UIN. Ознакомтесь заранее с инстукцией по ссылке https://bit.ly/3i8yfao. Если поле UIN пустое то продолжаем.")
+    bot.send_message(call.message.chat.id,
+                     """Добрый день! Вы запустили формирование запроса на получение скрипта для записи UIN. Ознакомтесь заранее с инстукцией по ссылке https://bit.ly/3i8yfao. Если поле UIN пустое то продолжаем.""")
     bot.send_message(call.message.chat.id, "Введите модель ФР:")
     bot.register_next_step_handler(call.message, ask_model_uin)
 
@@ -440,7 +507,9 @@ def ask_model_uin(message):
     model = message.text
 
     # Запрашиваем номер ЗН ККТ в ремонте и передаем модель
-    bot.send_message(message.chat.id, "Введите номер ЗН ККТ для которого необходимо запросить скрипт (длина 14 символов, начиная с '00'):")
+    bot.send_message(
+        message.chat.id,
+        """Введите номер ЗН ККТ для которого необходимо запросить скрипт (длина 14 символов, начиная с '00'):""")
     bot.register_next_step_handler(message, validate_repair_sn_uin, model)
 
 
@@ -453,7 +522,9 @@ def validate_repair_sn_uin(message, model):
 
     # Проверяем длину серийного номера и начинается ли он с '00'
     if len(repair_sn) != 14 or not repair_sn.startswith('00'):
-        bot.send_message(message.chat.id, "Номер ЗН ККТ должен составлять 14 символов и начинаться с '00'. Пожалуйста, введите корректный номер:")
+        bot.send_message(
+            message.chat.id,
+            """Номер ЗН ККТ должен составлять 14 символов и начинаться с '00'. Пожалуйста, введите корректный номер:""")
         bot.register_next_step_handler(message, validate_repair_sn_uin, model)
     else:
         # Если серийный номер прошел валидацию, переходим к формированию запроса
@@ -467,7 +538,8 @@ def validate_repair_sn_uin(message, model):
         telegram_user_id = message.from_user.id
 
         # Ищем соответствующего пользователя в базе данных
-        custom_user, created = CustomUser.objects.get_or_create(telegram_id=telegram_user_id)
+        custom_user, created = CustomUser.objects.get_or_create(
+            telegram_id=telegram_user_id)
 
         # Создаем экземпляр модели Item и заполняем его данными
         item = Item(
@@ -486,10 +558,140 @@ def validate_repair_sn_uin(message, model):
         # Сохраняем экземпляр модели в базе данных
         item.save()
         recipient_emails = [item.email]
-        send_email(recipient_emails, item.subject, item.description, item.ticket)
-        bot.send_message(message.chat.id, "Ваш запрос сформирован и отправлен, ожидайте ответ")
+        send_email(
+            recipient_emails, item.subject, item.description, item.ticket)
+        bot.send_message(message.chat.id,
+                         "Ваш запрос сформирован и отправлен, ожидайте ответ")
+
+# Обработчик кнопки "Проблема 'Данная модель не поддерживается"
+@bot.callback_query_handler(
+        func=lambda call: call.data == 'atol_not_supported'
+)
+def handle_atol_not_supported(call):
+    bot.send_message(call.message.chat.id,
+                     """Добрый день! Вы запустили формирование запроса скрипта для устранения проблемы 'Данная модель не поддерживается'. Для отмены задачи введите на любом шаге 'отмена'. Предварительно ознакомтесь с интрукцией по данной проблеме в разделе 'Инструкции' и подготовьте дамп файл для передачи вендеру. """)
+    subject_text = 'Запрос скрипта для устранения проблемы "Данная модель не поддерживается"'
+    template_name = "atol_not_supported"
+    bot.send_message(call.message.chat.id, "Введите модель ФР:")
+    bot.register_next_step_handler(call.message,
+                                   asc_model_sup,
+                                   subject_text,
+                                   template_name)
 
 
+def asc_model_sup(message, subject_text, template_name):
+    if message.text.lower() == "отмена":
+        cancel_operation(message)
+        return
+
+    model = message.text
+
+    # Запрашиваем номер ЗН ККТ в ремонте и передаем модель
+    bot.send_message(
+        message.chat.id,
+        """Введите номер ЗН ККТ для которого необходимо сформировать лицензию (длина 14 символов, начиная с '00'):""")
+    bot.register_next_step_handler(message, validate_repair_sn_sub, model,
+                                   subject_text, template_name)
+
+
+def validate_repair_sn_sub(message, model, subject_text, template_name):
+    if message.text.lower() == "отмена":
+        cancel_operation(message)
+        return
+
+    repair_sn = message.text
+
+    # Проверяем длину серийного номера и начинается ли он с '00'
+    if len(repair_sn) != 14 or not repair_sn.startswith('00'):
+        bot.send_message(
+            message.chat.id,
+            """Номер ЗН ККТ должен составлять 14 символов и начинаться с '00'. Пожалуйста, введите корректный номер:""")
+        bot.register_next_step_handler(message, ask_damp_file,
+                                       model, subject_text, template_name)
+    else:
+        # Если серийный номер прошел валидацию, переходим к запросу дамп файла.
+        ask_damp_file(message, model, repair_sn, subject_text,
+                      template_name)
+
+
+def ask_damp_file(message, model, repair_sn, subject_text, template_name):
+    bot.send_message(message.chat.id, "Пришлите дамп файл")
+    bot.register_next_step_handler(message, process_kkt_info_file_sub, model,
+                                   repair_sn, subject_text, template_name)
+
+
+def process_kkt_info_file_sub(message, model, repair_sn, subject_text,
+                              template_name):
+    # Получаем информацию о файле из сообщения
+    file_id = message.document.file_id
+    file_info = bot.get_file(file_id)
+    file_url = f"https://api.telegram.org/file/bot{TELEGRAM_TOKEN}/{file_info.file_path}"
+    
+    last_item = Item.objects.last()
+    if last_item:
+        next_ticket = last_item.ticket + 1
+    else:
+        next_ticket = 1
+
+    # Получаем пользователя Telegram
+    telegram_user_id = message.from_user.id
+
+    # Ищем соответствующего пользователя в базе данных
+    custom_user, created = CustomUser.objects.get_or_create(
+        telegram_id=telegram_user_id)
+
+    # Создаем экземпляр модели Item и заполняем его данными
+    item = Item(
+        ticket=next_ticket,
+        id_user=custom_user,
+        email=ATOL,
+        send_message=False,
+        subject=subject_text,
+    )
+    # Получаем шаблон письма из словаря и заменяем заполнители
+    email_text_template = email_templates.templates.get(template_name)
+    email_text = email_text_template.replace("model", model)
+    email_text = email_text.replace("serial_number", repair_sn)
+
+    # Заполняем параметр description экземпляра модели текстом письма
+    item.description = email_text
+
+    # Получаем содержимое файла по его URL
+    file_content = requests.get(file_url).content
+
+    # Создаем временный файл и записываем в него содержимое файла
+    with tempfile.NamedTemporaryFile(delete=True) as temp_file:
+        temp_file.write(file_content)
+        temp_file.flush()
+
+        # Перемещаем указатель файла в начало
+        temp_file.seek(0)
+
+        # Создаем объект InMemoryUploadedFile для сохранения в модель
+        file_name = file_url.split('/')[-1]  # Извлекаем имя файла из URL
+        file_size = len(file_content)
+        file_type = 'application/octet-stream'  # Можно попробовать определить тип файла, если это необходимо
+        in_memory_file = InMemoryUploadedFile(
+            temp_file, None, file_name, file_type, file_size, None
+        )
+        # Сохраняем файл в модели Item
+        item.image.save(file_name, in_memory_file, save=True)
+
+
+    # Отправляем письмо с данными, передавая объект файла, а не только содержимое
+    recipient_emails = [item.email]
+    subject = item.subject
+    send_email(recipient_emails, subject, email_text, item.ticket, item.image)
+
+    bot.send_message(message.chat.id, "Ваш запрос отправлен, ожидайте ответ.")
+
+
+
+
+
+
+
+# Обработчик кнопки 29 сеть
 def process_29_network_handler(message):
 
     # Получаем SAP магазина от пользователя
@@ -515,16 +717,16 @@ def handle_info(message):
             info_messages = []
             for image in images:
                 info_message = f"Актуальные образы {image.ts} :\n"
-                info_message += f"\n"
-                info_message += f"\n"
+                info_message += "\n"
+                info_message += "\n"
                 info_message += f"BO: {image.bo}\n"
-                info_message += f"\n"
+                info_message += "\n"
                 info_message += f"POS все кроме HP и NCR XR4: {image.pos}\n"
-                info_message += f"\n"
+                info_message += "\n"
                 info_message += f"POS HP и NCR XR4: {image.sco}\n"
-                info_message += f"\n"
+                info_message += "\n"
                 info_message += f"КСО: {image.pc}\n"
-                info_message += f"\n"
+                info_message += "\n"
                 info_message += f"PC: {image.pc}\n"
                 info_messages.append(info_message)
 
@@ -537,8 +739,10 @@ def handle_info(message):
 
     except Exception as e:
         logging.error(f"Произошла ошибка: {e}")
-        bot.send_message(message.from_user.id,
-                         "Произошла ошибка при выполнении операции. Пожалуйста, попробуйте еще раз.")
+        bot.send_message(
+            message.from_user.id,
+            """Произошла ошибка при выполнении операции.
+            Пожалуйста, попробуйте еще раз.""")
 
 
 # Обработчик кнопок с папками и файлами
@@ -552,7 +756,8 @@ def handle_folder_or_file(message):
         # Проверяем, заблокирован ли пользователь
         if user.access == 1:
             # Пользователь заблокирован, отправляем сообщение с отказом в доступе
-            bot.send_message(message.from_user.id, "Вам запрещен доступ к боту.")
+            bot.send_message(message.from_user.id,
+                             "Вам запрещен доступ к боту.")
             return
 
         chosen_item = message.text
@@ -565,7 +770,8 @@ def handle_folder_or_file(message):
         elif os.path.isdir(chosen_item_path):
             # Проверяем, если выбрана папка, но она выше базовой папки
             if not chosen_item_path.startswith(base_folder):
-                bot.send_message(message.from_user.id, "Вы достигли верхней директории.")
+                bot.send_message(message.from_user.id,
+                                 "Вы достигли верхней директории.")
                 return
 
             # Если выбрана папка, обновляем текущий путь и отправляем клавиатуру с содержимым папки
@@ -573,50 +779,16 @@ def handle_folder_or_file(message):
             send_keyboard(message)
         else:
             # Если выбран файл, отправляем его пользователю
-            bot.send_document(message.from_user.id, open(chosen_item_path, 'rb'))
+            bot.send_document(message.from_user.id, open(chosen_item_path,
+                                                         'rb'))
 
     except Exception as e:
         # Записываем ошибку в лог и уведомляем пользователя о неполадке
         logging.error(f"Произошла ошибка: {e}")
-        bot.send_message(message.from_user.id, "Произошла ошибка при выполнении операции. Пожалуйста, попробуйте еще раз.")
-
-
-# Обработчик кнопки "Инфо"
-@bot.message_handler(
-    func=lambda message: message.text == 'Инфо. Актуальные образы')
-def handle_info(message):
-    try:
-        # Получаем все объекты модели Image
-        images = Image.objects.all()
-
-        if images.exists():
-            info_messages = []
-            for image in images:
-                info_message = f"Актуальные образы {image.ts} :\n"
-                info_message += f"\n"
-                info_message += f"\n"
-                info_message += f"BO: {image.bo}\n"
-                info_message += f"\n"
-                info_message += f"POS все кроме HP и NCR XR4: {image.pos}\n"
-                info_message += f"\n"
-                info_message += f"POS HP и NCR XR4: {image.sco}\n"
-                info_message += f"\n"
-                info_message += f"КСО: {image.pc}\n"
-                info_message += f"\n"
-                info_message += f"PC: {image.pc}\n"
-                info_messages.append(info_message)
-
-            # Отправляем сообщения с информацией
-            for info_message in info_messages:
-                bot.send_message(message.from_user.id, info_message)
-        else:
-            bot.send_message(message.from_user.id,
-                             "В таблице images нет данных для отображения.")
-
-    except Exception as e:
-        logging.error(f"Произошла ошибка: {e}")
-        bot.send_message(message.from_user.id,
-                         "Произошла ошибка при выполнении операции. Пожалуйста, попробуйте еще раз.")
+        bot.send_message(
+            message.from_user.id,
+            """Произошла ошибка при выполнении операции.
+            Пожалуйста, попробуйте еще раз.""")
 
 
 # Запускаем бота

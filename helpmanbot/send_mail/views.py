@@ -191,7 +191,7 @@ def check_emails():
                                                          message_text)
 
                             # Пометка письма как отправленного
-                            item.send_message = True
+                            # item.send_message = True
                             item.save()
 
     # Закрытие соединения с почтовым сервером
